@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Moderna",
-    "slug": "Moderna",
+    "name": "KRS",
+    "slug": "KRS",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -53,7 +53,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "461f0e52-3e1d-484f-be46-23eb8ceb83c0"
+        "projectId": "cc79b320-12ac-4d81-872c-896cb9180581"
       }
     }
   }

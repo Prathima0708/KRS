@@ -53,6 +53,7 @@ import { Onboarding1,
 } from '../screens'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigation from './BottomTabNavigation'
+import MainScreen from '../components/MainScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -98,6 +99,7 @@ const AppNavigation = () => {
                 <Stack.Screen name="Signup" component={Signup}/>
                 <Stack.Screen name="StartUpScreen" component={StartUpScreen}/>
                 <Stack.Screen name="Login" component={Login}/>
+                {/* <Stack.Screen name="Login" component={MainScreen}/> */}
                 <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
                 <Stack.Screen name="ResetPassword" component={ResetPassword}/>
                 <Stack.Screen name="Verification" component={Verification}/>
