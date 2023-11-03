@@ -155,7 +155,7 @@ export const furnitureCategories = [
       status: "Completed",
       date: "12 Oct, 10:30",
       name: 'Choco chips',
-      type: 'Furniture',
+      type: 'Lorem',
       price: 299.99,
       numberOfItems: 1,
       receipt: "#20231001",
@@ -166,7 +166,7 @@ export const furnitureCategories = [
       status: "Completed",
       date: "13 Oct, 14:15",
       name: 'Spices',
-      type: 'Furniture',
+      type: 'Lorem',
       price: 499.99,
       numberOfItems: 2,
       receipt: "#20231002",
@@ -177,7 +177,7 @@ export const furnitureCategories = [
       status: "Canceled",
       date: "14 Oct, 11:45",
       name: 'Amul products',
-      type: 'Furniture',
+      type: 'Lorem',
       price: 199.99,
       numberOfItems: 1,
       receipt: "#20231003",
@@ -221,120 +221,89 @@ export const furnitureCategories = [
   
   
   export const TransactionHistoryData = [
-    {
-        id: "1",
-        image: images.product1,
-        name: "Elegant Sofa Set",
-        date: "Oct 14, 2023 | 8:00 AM", 
-        type: "Purchase",
-        amount: 299.99
+    { 
+        id: 1,
+        image: images.shop9,
+        avatar: images.avatar,
+        name: 'Lorem Ipsum',
+        message: 'Lorem Ipsum has been the industry standard',
+        time: '2023-10-06T03:55:02.922Z'
     },
-    {
-        id: "2",
-        image: images.product2,
-        name: "Luxurious Bed Frame",
-        date: "Oct 14, 2023 | 9:00 AM", 
-        type: "Purchase",
-        amount: 499.99
+    { 
+        id: 2,
+        image: images.shop10,
+        avatar: images.avatar2,
+        name: 'Lorem Ipsum',
+        message: 'Lorem Ipsum has been the industry standard',
+        time: '2023-10-02T03:55:02.922Z'
     },
-    {
-        id: "3",
-        image: images.product3,
-        name: "Stylish Dining Table",
-        date: "Oct 13, 2023 | 10:00 AM", 
-        type: "Purchase",
-        amount: 199.99
+    { 
+        id: 3,
+        image: images.shop11,
+        avatar: images.avatar3,
+        name: 'Lorem Ipsum',
+        message: 'Lorem Ipsum has been the industry standard',
+        time: '2023-09-16T03:55:02.922Z'
     },
-    {
-        id: "4",
-        image: images.product4,
-        name: "Artistic Home Decor Accent",
-        date: "Oct 13, 2023 | 11:00 AM", 
-        type: "Purchase",
-        amount: 99.99
+    { 
+        id: 4,
+        image: images.shop9,
+        avatar: images.avatar4,
+        name: 'Lorem Ipsum',
+        message: 'Lorem Ipsum has been the industry standard',
+        time: '2023-09-16T03:55:02.922Z'
     },
-    {
-        id: "5",
-        image: images.product5,
-        name: "Comfortable Office Chair",
-        date: "Oct 13, 2023 | 1:00 PM", 
-        type: "Purchase",
-        amount: 149.99
-    },
-    {
-        id: "6",
-        image: images.product6,
-        name: "Functional Bookcase",
-        date: "Oct 12, 2023 | 3:00 PM", 
-        type: "Purchase",
-        amount: 129.99
-    },
-    {
-        id: "7",
-        image: images.product7,
-        name: "Cozy Armchair",
-        date: "Oct 12, 2023 | 5:00 PM", 
-        type: "Purchase",
-        amount: 199.99
+    { 
+        id: 5,
+        image: images.shop12,
+        avatar: images.avatar5,
+        name: 'Lorem Ipsum',
+        message: 'Lorem Ipsum has been the industry standard',
+        time: '2023-08-16T03:55:02.922Z'
     },
   ];
   
   export const notifications = [
       { 
           id: 1,
-          image: images.product1,
+          image: images.shop9,
           avatar: images.avatar,
-          name: 'Furniture Store',
-          message: 'New collection of elegant sofas now available!',
+          name: 'Lorem Ipsum',
+          message: 'Lorem Ipsum has been the industry standard',
           time: '2023-10-06T03:55:02.922Z'
       },
       { 
           id: 2,
-          image: images.product2,
+          image: images.shop10,
           avatar: images.avatar2,
-          name: 'Home Decor Center',
-          message: 'Limited-time offer: 20% off on all home decor items!',
+          name: 'Lorem Ipsum',
+          message: 'Lorem Ipsum has been the industry standard',
           time: '2023-10-02T03:55:02.922Z'
       },
       { 
           id: 3,
-          image: images.product3,
+          image: images.shop11,
           avatar: images.avatar3,
-          name: 'Furniture Sale',
-          message: 'Big sale event this weekend. Don\'t miss out!',
+          name: 'Lorem Ipsum',
+          message: 'Lorem Ipsum has been the industry standard',
           time: '2023-09-16T03:55:02.922Z'
       },
       { 
           id: 4,
-          image: images.product4,
+          image: images.shop9,
           avatar: images.avatar4,
-          name: 'Furniture Specials',
-          message: 'Special discount on all furniture sets today!',
+          name: 'Lorem Ipsum',
+          message: 'Lorem Ipsum has been the industry standard',
           time: '2023-09-16T03:55:02.922Z'
       },
       { 
           id: 5,
-          image: images.product5,
+          image: images.shop12,
           avatar: images.avatar5,
-          name: 'Home Furnishings',
-          message: 'New arrivals in the chairs and tables section!',
+          name: 'Lorem Ipsum',
+          message: 'Lorem Ipsum has been the industry standard',
           time: '2023-08-16T03:55:02.922Z'
       },
-      { 
-          id: 6,
-          image: images.product6,
-          avatar: images.avatar6,
-          name: 'Interior Designs',
-          message: 'Get a free consultation for your home makeover!',
-          time: '2023-08-16T03:55:02.922Z'
-      },
-      { 
-          id: 7,
-          image: images.product7,
-          avatar: images.avatar7,
-          name: 'Furniture Styles',
-          message: 'Discover the latest trends in modern furniture design.',
-          time: '2023-08-16T03:55:02.922Z'
-      }
+  
   ];
   

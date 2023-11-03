@@ -56,7 +56,7 @@ const ProductByKeywords = () => {
                                 fontFamily: 'bold',
                             }}
                         >
-                            Sofa
+                            Lorem
                         </Text>
                         <View>
                             <Image

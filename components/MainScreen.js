@@ -6,16 +6,20 @@ const MainScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Box text="red" />
-        <Box text="blue" />
+        <Box text="Order" />
+        <Box text="Buy again" />
       </View>
       <View style={styles.row}>
-        <Box text="green" />
-        <Box text="yellow" />
+        <Box text="Order list" />
+        <Box text="Cart" />
       </View>
       <View style={styles.row}>
-        <Box text="purple" />
-        <Box text="orange" />
+        <Box text="Favorites" />
+        <Box text="Ledger" />
+      </View>
+      <View style={styles.row}>
+        <Box text="Invoices" />
+        <Box text="Return" />
       </View>
     </View>
   );
