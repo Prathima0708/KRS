@@ -61,9 +61,7 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <LinearGradient 
-          colors={[COLORS.primary, COLORS.primary]}
-          style={{ flex: 1, backgroundColor: COLORS.blue }}>
+        <LinearGradient colors={[COLORS.primary, COLORS.primary]} style={{ flex: 1, backgroundColor: COLORS.blue }}>
             <StatusBar hidden />
             <View style={commonStyles.header}>
                 <Text style={commonStyles.headerTitle}>Log In</Text>
@@ -143,21 +141,12 @@ const Login = ({ navigation }) => {
                         style={commonStyles.socialIconContainer}
                     >
                         <Image
-                            source={icons.twitter}
+                            source={icons.google}
                             resizeMode="contain"
                             style={commonStyles.socialLogo}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={appleAuthHandler}
-                        style={commonStyles.socialIconContainer}
-                    >
-                        <Image
-                            source={icons.apple}
-                            resizeMode="contain"
-                            style={commonStyles.socialLogo}
-                        />
-                    </TouchableOpacity>
+                 
                 </View>
             </Animatable.View>
         </LinearGradient>

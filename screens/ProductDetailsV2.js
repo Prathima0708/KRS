@@ -16,7 +16,7 @@ import ReviewStars from '../components/ReviewStars'
 import ReviewCard from '../components/ReviewCard'
 
 const ProductDetailsV2 = ({ navigation }) => {
-    const [mainImage, setMainImage] = useState(images.product6)
+    const [mainImage, setMainImage] = useState(images.shop9)
     /**
      * @returns user header
      */
@@ -77,31 +77,31 @@ const ProductDetailsV2 = ({ navigation }) => {
                 </View>
                 <View style={styles.galleryRightContainer}>
                     <TouchableOpacity
-                        onPress={() => setMainImage(images.product2)}
+                        onPress={() => setMainImage(images.shop10)}
                         style={styles.galleryItemContainer}
                     >
                         <Image
-                            source={images.product2}
+                            source={images.shop10}
                             resizeMode="cover"
                             style={styles.galleryItem}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => setMainImage(images.product3)}
+                        onPress={() => setMainImage(images.shop12)}
                         style={styles.galleryItemContainer}
                     >
                         <Image
-                            source={images.product3}
+                            source={images.shop12}
                             resizeMode="cover"
                             style={styles.galleryItem}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => setMainImage(images.product4)}
+                        onPress={() => setMainImage(images.shop8)}
                         style={styles.galleryItemContainer}
                     >
                         <Image
-                            source={images.product4}
+                            source={images.shop8}
                             resizeMode="cover"
                             style={styles.galleryItem}
                         />
@@ -129,7 +129,7 @@ const ProductDetailsV2 = ({ navigation }) => {
                         marginVertical: 12,
                     }}
                 >
-                    <Text style={styles.contentTitle}>Sofa Pro</Text>
+                    <Text style={styles.contentTitle}>Lorem ipsum</Text>
                     <Text style={styles.contentTitle}>$ 20</Text>
                 </View>
                 <View
@@ -189,10 +189,7 @@ const ProductDetailsV2 = ({ navigation }) => {
                 <View>
                     <Text style={styles.headingTitle}>About</Text>
                     <Text style={{ ...FONTS.body4, marginVertical: 12 }}>
-                    "Sofa Pro" is a premium furniture solution for those seeking 
-                        unparalleled comfort and style in their living spaces. With a focus 
-                        on ergonomic design and high-quality materials, Sofa Pro offers a 
-                        diverse range of sofas that cater to various aesthetic preferences and spatial needs.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
                     </Text>
                 </View>
 

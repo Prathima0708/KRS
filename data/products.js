@@ -3,85 +3,58 @@ import { images } from "../constants";
 export const popularProducts = [
   {
     id: 1,
-    name: "Elegant Sofa Set",
-    shop: "Furniture Emporium",
-    image: images.product1,
+    name: "Spices",
+    shop: "Adarsh Spices",
+    image: images.shop10,
     price: 299.99
   },
   {
     id: 2,
-    name: "Luxurious Bed Frame",
-    shop: "Dreamy Bedrooms",
-    image: images.product2,
+    name: "Amul Dairy products",
+    shop: "Amul Products",
+    image: images.shop11,
     price: 499.99
   },
   {
     id: 3,
-    name: "Stylish Dining Table",
-    shop: "Fine Dining Furniture",
-    image: images.product3,
+    name: "Choco Chips",
+    shop: "White choco chips",
+    image: images.shop8,
     price: 199.99
   },
-  {
-    id: 4,
-    name: "Artistic Home Decor Accent",
-    shop: "Creative Living",
-    image: images.product4,
-    price: 99.99
-  },
-  {
-    id: 5,
-    name: "Comfortable Office Chair",
-    shop: "Workplace Wonders",
-    image: images.product5,
-    price: 149.99
-  },
+
 ];
 
 export const products = [
-    {
-      id: 1,
-      name: "Elegant Sofa Set",
-      shop: "Furniture Emporium",
-      image: images.product1,
-      price: 299.99
-    },
-    {
-      id: 2,
-      name: "Luxurious Bed Frame",
-      shop: "Dreamy Bedrooms",
-      image: images.product2,
-      price: 499.99
-    },
-    {
-      id: 3,
-      name: "Stylish Dining Table",
-      shop: "Fine Dining Furniture",
-      image: images.product3,
-      price: 199.99
-    },
-    {
-      id: 4,
-      name: "Artistic Home Decor Accent",
-      shop: "Creative Living",
-      image: images.product4,
-      price: 99.99
-    },
-    {
-      id: 5,
-      name: "Comfortable Office Chair",
-      shop: "Workplace Wonders",
-      image: images.product5,
-      price: 149.99
-    },
+  {
+    id: 1,
+    name: "Spices",
+    shop: "Adarsh Spices",
+    image: images.shop12,
+    price: 299.99
+  },
+  {
+    id: 2,
+    name: "Amul Dairy products",
+    shop: "Amul Products",
+    image: images.shop8,
+    price: 499.99
+  },
+  {
+    id: 3,
+    name: "Choco Chips",
+    shop: "White choco chips",
+    image: images.shop9,
+    price: 199.99
+  },
   ];
 
 export const reviews = [
   {
     id: 1,
     image: images.avatar,
-    title: 'Impressive Quality',
-    description: 'I am impressed with the quality of the furniture! It was exactly what I was looking for. Highly recommended!',
+    title: 'Lorem Ipsum',
+    description: 'I am impressed with the quality of the product! It was exactly what I was looking for. Highly recommended!',
     date: '20/09/2023',
     rating: 5,
   },
@@ -89,7 +62,7 @@ export const reviews = [
     id: 2,
     image: images.avatar2,
     title: 'Excellent Service',
-    description: 'The service provided by the furniture store was exceptional. The delivery was timely, and the packaging was excellent. I am happy with my furniture shopping experience.',
+    description: 'The service provided by the product store was exceptional. The delivery was timely, and the packaging was excellent. ',
     date: '23/09/2025',
     rating: 5,
   },
@@ -97,7 +70,7 @@ export const reviews = [
     id: 3,
     image: images.avatar3,
     title: 'Stylish and Sturdy',
-    description: "The furniture I received was stylish and sturdy. It's great to know that I can rely on this store for my furniture needs.",
+    description: " It's great to know that I can rely on this store for my product needs.",
     date: '20/12/2024',
     rating: 5,
   },
@@ -105,7 +78,7 @@ export const reviews = [
     id: 4,
     image: images.avatar4,
     title: 'Good Quality Decor Accent',
-    description: "I'm satisfied with the quality of the home decor accent. It added a unique touch to my living room. I will definitely shop here again.",
+    description: "I'm satisfied with the quality of the product. ",
     date: '20/12/2024',
     rating: 4,
   },

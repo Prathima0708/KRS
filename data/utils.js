@@ -96,69 +96,56 @@ export const contacts = [
 export const furnitureCategories = [
     {
       id: 1,
-      name: "All Furniture",
-      image: images.livingroom,
-      description: "Explore our entire furniture collection",
+      name: "Dairy products",
+      image: images.shop8,
+      description: "Explore our entire products",
       startingPrice: 99.99
     },
     {
       id: 2,
-      name: "Sofas",
-      image: images.sofa,
+      name: "Spices",
+      image: images.shop10,
       description: "Find comfortable and stylish sofas for your living room",
       startingPrice: 299.99
     },
     {
       id: 3,
-      name: "Beds",
-      image: images.bed,
+      name: "Choco chips",
+      image: images.shop9,
       description: "Discover cozy and elegant beds for a restful night's sleep",
       startingPrice: 399.99
     },
-    {
-      id: 4,
-      name: "Tables",
-      image: images.table,
-      description: "Browse our collection of modern and functional tables",
-      startingPrice: 149.99
-    },
-    {
-      id: 5,
-      name: "Chairs",
-      image: images.chair,
-      description:  "Find ergonomic and stylish chairs for your home or office",
-      startingPrice: 89.99
-    },
+  
   ];
   
   
   export const orders = [
     {
       id: 1,
-      name: 'Elegant Sofa Set',
+      name: 'Choco chips',
       type: 'Furniture',
       price: 299.99,
       numberOfItems: 1,
       receipt: "#20231001",
-      image: images.product1
+      image: images.shop8
     },
     {
       id: 2,
-      name: 'Luxurious Bed Frame',
+      name: 'Spices',
       type: 'Furniture',
       price: 499.99,
       numberOfItems: 2,
       receipt: "#20231002",
-      image: images.product2
+      image: images.shop10
     },
     {
       id: 3,
-      name: 'Stylish Dining Table',
+      name: 'Amul products',
       type: 'Furniture',
       price: 199.99,
       numberOfItems: 1,
       receipt: "#20231003",
-      image: images.product3
+      image: images.shop11
     },
   ];
   
@@ -167,34 +154,34 @@ export const furnitureCategories = [
       id: 1,
       status: "Completed",
       date: "12 Oct, 10:30",
-      name: 'Elegant Sofa Set',
+      name: 'Choco chips',
       type: 'Furniture',
       price: 299.99,
       numberOfItems: 1,
       receipt: "#20231001",
-      image: images.product1
+      image: images.shop8
     },
     {
       id: 2,
       status: "Completed",
       date: "13 Oct, 14:15",
-      name: 'Luxurious Bed Frame',
+      name: 'Spices',
       type: 'Furniture',
       price: 499.99,
       numberOfItems: 2,
       receipt: "#20231002",
-      image: images.product2
+      image: images.shop10
     },
     {
       id: 3,
       status: "Canceled",
       date: "14 Oct, 11:45",
-      name: 'Stylish Dining Table',
+      name: 'Amul products',
       type: 'Furniture',
       price: 199.99,
       numberOfItems: 1,
       receipt: "#20231003",
-      image: images.product3
+      image: images.shop11
     },
   ];
   

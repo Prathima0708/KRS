@@ -96,7 +96,7 @@ const ProductDetailsV1 = () => {
                         />
                     </TouchableOpacity>
                     <Image
-                        source={images.product5}
+                        source={images.shop8}
                         resizeMode="contain"
                         style={{
                             width: SIZES.width - 32,
@@ -121,7 +121,7 @@ const ProductDetailsV1 = () => {
                         }}
                     >
                         <Image
-                            source={images.product2}
+                            source={images.shop10}
                             resizeMode="contain"
                             style={{
                                 width: 22,
@@ -146,7 +146,7 @@ const ProductDetailsV1 = () => {
                             marginVertical: 10,
                         }}
                     >
-                        Sofa Pro
+                        Lorem Ipsum
                     </Text>
                     <Text
                         style={{
@@ -155,10 +155,7 @@ const ProductDetailsV1 = () => {
                             color: COLORS.gray5,
                         }}
                     >
-                        "Sofa Pro" is a premium furniture solution for those seeking 
-                        unparalleled comfort and style in their living spaces. With a focus 
-                        on ergonomic design and high-quality materials, Sofa Pro offers a 
-                        diverse range of sofas that cater to various aesthetic preferences and spatial needs.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
                     </Text>
 
                     <View style={{ flexDirection: 'row', marginTop: 16 }}>

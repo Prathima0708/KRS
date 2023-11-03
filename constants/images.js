@@ -27,6 +27,11 @@ const shop5 = require("../assets/images/shops/shop5.jpg");
 const shop6 = require("../assets/images/shops/shop6.jpg");
 const shop7 = require("../assets/images/shops/shop7.jpg");
 const shop8 = require("../assets/images/shops/white-chocolate-chips.jpg");
+const shop9 = require("../assets/images/shops/choco-strand.jpg");
+const shop10 = require("../assets/images/shops/30g-urad-masala-papad.jpg");
+const shop11 = require("../assets/images/shops/amul-dairy-products.jpg");
+const shop12 = require("../assets/images/shops/frozen-products.jpg");
+
 
 
 const product1 = require("../assets/images/products/product1.jpg");
@@ -42,6 +47,7 @@ const chair = require("../assets/images/categories/chair.png");
 const livingroom = require("../assets/images/categories/livingroom.png");
 const sofa = require("../assets/images/categories/sofa.png");
 const table = require("../assets/images/categories/table.png");
+const dairyproducts = require("../assets/images/categories/dairy-products.avif");
 
 export default {
     avatar,
@@ -72,6 +78,10 @@ export default {
     shop6,
     shop7,
     shop8,
+    shop9,
+    shop10,
+    shop11,
+    shop12,
     product1,
     product2,
     product3,
@@ -84,4 +94,5 @@ export default {
     livingroom,
     sofa,
     table,
+    dairyproducts
 }

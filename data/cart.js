@@ -3,26 +3,26 @@ import { images } from '../constants';
 export const cartData = [
     {
         id: 1,
-        name: "Elegant Sofa Set",
-        image: images.product1,
+        name: "Choco chips",
+        image: images.shop8,
         price: 299.99,
         quantity: 1,
-        type: "Furniture"
+        type: "products"
     },
     {
         id: 2,
-        name: "Luxurious Bed Frame",
-        image: images.product2,
+        name: "Dairy products",
+        image: images.shop11,
         price: 499.99,
         quantity: 1,
-        type: "Furniture"
+        type: "products"
     },
     {
         id: 3,
-        name: "Stylish Dining Table",
-        image: images.product3,
+        name: "Spices",
+        image: images.shop10,
         price: 199.99,
         quantity: 2,
-        type: "Furniture"
+        type: "products"
     }
 ];

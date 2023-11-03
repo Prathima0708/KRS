@@ -122,7 +122,7 @@ const ShopView2 = () => {
                             marginVertical: 10,
                         }}
                     >
-                        Marvella Sofa Premium
+                        Lorem Ipsum
                     </Text>
                     <Text
                         style={{
@@ -131,9 +131,7 @@ const ShopView2 = () => {
                             color: COLORS.gray5,
                         }}
                     >
-                        Marvella sed diam eget risus varius blandit sit amet non
-                        magna. Integer posuere erat a ante venenatis dapibus
-                        posuere velit aliquet.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
                     </Text>
 
                     {/* Render Keyword related to shops */}

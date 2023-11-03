@@ -5,13 +5,12 @@ import { COLORS, images } from '../constants';
 const { width } = Dimensions.get('window');
 
 const sliderImages = [
- images.shop1,
-  images.shop2,
-  images.shop3,
-  images.shop4,
-  images.shop5,
-  images.shop6,
-  images.shop7,
+ images.shop10,
+  images.shop11,
+  images.shop8,
+  images.shop9,
+  images.shop12,
+  
 ];
 
 const ImageSlider = () => {

@@ -123,7 +123,7 @@ const TrackingOrdersV2 = ({ navigation }) => {
               marginRight: 12
             }}>
               <Image
-                source={images.product5}
+                source={images.shop9}
                 resizeMode='contain'
                 style={{
                   height: 80,
@@ -137,15 +137,15 @@ const TrackingOrdersV2 = ({ navigation }) => {
             <View style={{
               flexDirection: 'column',
             }}>
-              <Text style={{ ...FONTS.h4 }}>Sofa Bv</Text>
+              <Text style={{ ...FONTS.h4 }}>Choco chips</Text>
               <Text style={styles.body3}>Orderd at 12 Jan, 10:00pm</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.h3}>2x</Text>
-                <Text style={styles.body3}>Green Sofa</Text>
+                <Text style={styles.body3}>white choco chips</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.h3}>4x</Text>
-                <Text style={styles.body3}>Yellow Chair</Text>
+                <Text style={styles.body3}>choco chips</Text>
               </View>
             </View>
           </View>

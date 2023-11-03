@@ -152,7 +152,7 @@ const HomeV1 = ({ navigation }) => {
                       alignItems: 'center',
                   }}
               >
-                  <Text style={{ ...FONTS.body2 }}>Open Shops</Text>
+                  <Text style={{ ...FONTS.body2 }}>Open Products</Text>
                   <TouchableOpacity
                       onPress={() => navigation.navigate('OpenShops')}
                       style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -343,7 +343,7 @@ const HomeV1 = ({ navigation }) => {
                                       fontWeight: 'regular',
                                   }}
                               >
-                                  Halab lab office
+                                  Manipal
                               </Text>
                               <Image
                                   source={icons.arrowDown2}
@@ -409,7 +409,7 @@ const HomeV1 = ({ navigation }) => {
                   }}
               >
                   <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
-                      Hey Halal,
+                      Hey Abc,
                   </Text>
                   <Text style={{ fontSize: 16, fontFamily: 'bold' }}>
                       Good Afternoon!
