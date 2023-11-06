@@ -99,7 +99,7 @@ const AppNavigation = () => {
                 <Stack.Screen name="Signup" component={Signup}/>
                 <Stack.Screen name="StartUpScreen" component={StartUpScreen}/>
                 <Stack.Screen name="Login" component={Login}/>
-                {/* <Stack.Screen name="Login" component={MainScreen}/> */}
+                {/* <Stack.Screen name="Home" component={MainScreen}/> */}
                 <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
                 <Stack.Screen name="ResetPassword" component={ResetPassword}/>
                 <Stack.Screen name="Verification" component={Verification}/>
