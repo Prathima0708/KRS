@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { FONTS } from './constants/fonts'
 import AppNavigation from './navigations/AppNavigation'
 import { LogBox } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 //Ignore all log notifications
 LogBox.ignoreAllLogs();
@@ -27,6 +28,7 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
        <AppNavigation />
+       <Toast />
     </SafeAreaProvider>
   );
 }

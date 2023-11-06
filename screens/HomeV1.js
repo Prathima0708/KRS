@@ -25,7 +25,9 @@ import { furnitureStores } from '../data/shops'
 import { furnitureCategories } from '../data/utils'
 import image1 from "../assets/images/mainimage.jpg";
 import Box from '../components/Box'
-const HomeV1 = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native'
+const HomeV1 = () => {
+    const navigation=useNavigation()
   const [searchQuery, setSearchQuery] = useState('')
   const [modalVisible, setModalVisible] = useState(true)
 
@@ -448,12 +450,12 @@ const HomeV1 = ({ navigation }) => {
             </TouchableOpacity>
       </View>
       <View style={styles.row}>
-        <Box text="Order" onPress={() => navigation.navigate("Main")} iconName="cart-check"/>
+        <Box text="Order" onPress={() => navigation.navigate("Order")} iconName="cart-check"/>
         <Box text="Buy again" onPress={() => navigation.navigate("Main")} iconName="cart-arrow-down" />
       </View>
       <View style={styles.row}>
         <Box text="Order list" onPress={() => navigation.navigate("Main")} iconName="clipboard-list-outline" />
-        <Box text="Cart" onPress={() => navigation.navigate("Main")} iconName="cart-plus"/>
+        <Box text="Cart"   onPress={() => navigation.navigate('Cart')} iconName="cart-plus"/>
       </View>
       <View style={styles.row}>
         <Box text="Favorites" onPress={() => navigation.navigate("Main")} iconName="heart-outline"/>
@@ -485,12 +487,12 @@ const HomeV1 = ({ navigation }) => {
                   {/* {renderContent()} */}
               </ScrollView>
           </View>
-          <CustomModal
+          {/* <CustomModal
               modalVisible={modalVisible}
               setModalVisible={setModalVisible}
               onPressGotIt={handlePressGotIt}
               code="#1243CD2"
-          />
+          /> */}
       </SafeAreaView>
   )
 }

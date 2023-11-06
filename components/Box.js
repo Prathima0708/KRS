@@ -2,19 +2,23 @@ import React from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Box = ({ text, onPress, iconName }) => {
-  return (
-  <Pressable style={styles.box} onPress={onPress}>
-    <View style={styles.container}>
+  const Box = ({ text, onPress, iconName }) => {
+    const handlePress = () => {
+      console.log(`Navigating to ${text} screen`);
+      onPress(); // Try removing this line, it should already be called when you tap the Box.
+    };
+    return (
+    <Pressable style={styles.box} onPress={onPress}>
+      <View style={styles.container}>
 
-      <View style={styles.textContainer}>
-      {iconName && <MaterialCommunityIcons name={iconName} size={30} color="black" />}
-        <Text style={styles.text}>{text}</Text>
+        <View style={styles.textContainer}>
+         <MaterialCommunityIcons name={iconName} size={30} color="black" />
+          <Text style={styles.text}>{text}</Text>
+        </View>
       </View>
-    </View>
-  </Pressable>
-  );
-};
+    </Pressable>
+    );
+  };
 
 const styles = StyleSheet.create({
   box: {
