@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Dimensions } from 'react-native';
 
   const Box = ({ text, onPress, iconName }) => {
     const handlePress = () => {
@@ -8,7 +9,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
       onPress(); // Try removing this line, it should already be called when you tap the Box.
     };
     return (
-    <Pressable style={styles.box} onPress={onPress}>
+      <Pressable
+      android_ripple={{ color: 'rgba(0, 0, 0, 0)', borderless: true, radius: 3 }}
+      style={({ pressed }) => [
+        styles.box,
+        {
+          backgroundColor: pressed ? '#F2F3F4' : 'white', // Change the background color when pressed
+        },
+      ]}
+      onPress={onPress}
+    >
       <View style={styles.container}>
 
         <View style={styles.textContainer}>
@@ -19,10 +29,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
     </Pressable>
     );
   };
-
+  const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   box: {
-    width: '45%',
+    width: width < 768 ? '50%' : '45%',
     height: 60,
     margin: 5,
     borderRadius: 40,
@@ -49,7 +59,8 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   text: {
-    fontSize: 16,
+    fontSize: width < 768 ? 14 : 16,
+    fontFamily:'regular'
   },
 });
 

@@ -415,7 +415,7 @@ const HomeV1 = () => {
           
           {
             // Try setting `flexDirection` to `"row"`.
-            top:270,
+            top:170,
             flexDirection: 'row',
           },
         ]}>
@@ -433,7 +433,7 @@ const HomeV1 = () => {
           {
             flexDirection: 'row',
             marginVertical:70,
-            top:205
+            top:105
           },
         ]}>
           <TouchableOpacity
@@ -449,23 +449,24 @@ const HomeV1 = () => {
               </View>
             </TouchableOpacity>
       </View>
-      <View style={styles.row}>
-        <Box text="Order" onPress={() => navigation.navigate("Order")} iconName="cart-check"/>
-        <Box text="Buy again" onPress={() => navigation.navigate("Main")} iconName="cart-arrow-down" />
-      </View>
-      <View style={styles.row}>
-        <Box text="Order list" onPress={() => navigation.navigate("Main")} iconName="clipboard-list-outline" />
-        <Box text="Cart"   onPress={() => navigation.navigate('Cart')} iconName="cart-plus"/>
-      </View>
-      <View style={styles.row}>
-        <Box text="Favorites" onPress={() => navigation.navigate("Main")} iconName="heart-outline"/>
-        <Box text="Ledger" onPress={() => navigation.navigate("Main")} iconName="note-check-outline"/>
-      </View>
-      <View style={styles.row}>
-        <Box text="Invoices"  onPress={() => navigation.navigate("Main")} iconName="finance"/>
-        <Box text="Return" onPress={() => navigation.navigate("Main")} iconName="hand-coin"/>
-      </View>
+      
     </View>
+    <View style={styles.row}>
+        <Box text="Order" onPress={() => navigation.navigate("Order")} iconName="cart-check"/>
+        <Box text="Buy again"  iconName="cart-arrow-down" />
+      </View>
+      <View style={styles.row}>
+        <Box text="Order list"  iconName="clipboard-list-outline" />
+        <Box text="Cart" onPress={() => navigation.navigate('Cart')} iconName="cart-plus"/>
+      </View>
+      <View style={styles.row}>
+        <Box text="Favorites"  iconName="heart-outline"/>
+        <Box text="Ledger"  iconName="note-check-outline"/>
+      </View>
+      <View style={styles.row}>
+        <Box text="Invoices"   iconName="finance"/>
+        <Box text="Return"  iconName="hand-coin"/>
+      </View>
 
               {/* <View
                   style={{
@@ -509,22 +510,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   row: {
+    marginHorizontal:20,
     flexDirection: 'row',
-    top:130,
+    top:70,
     justifyContent: 'space-between',
   },
   mainText:{
     fontSize:24,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    fontFamily:'regular'
   },
   subText:{
-    color:'grey'
+    color:'grey',
+    fontFamily:'regular'
   },
   fullScreenImage: {
     width: '115%',
     height: '50%',
     objectFit:'fill',
-    top:5,
+    top:15,
     resizeMode: 'cover',
     position: 'absolute',
   },

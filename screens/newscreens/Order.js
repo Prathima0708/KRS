@@ -8,7 +8,8 @@ import {
   Modal,
   TextInput,
   Image,
-  Button
+  Button,
+  StyleSheet
 
 } from 'react-native';
 import {
@@ -19,9 +20,11 @@ import {
 
   Fontisto,
 } from '@expo/vector-icons'
-import { CheckBox } from '@react-native-community/checkbox';
+import { CheckBox } from 'react-native-elements';
+
 import shop1 from "../../assets/images/shops/shop7.jpg"
 import { images } from "../../constants/images"
+import { FONTS, SIZES } from '../../constants';
 import Toast from 'react-native-toast-message';
 // import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -42,16 +45,18 @@ const Order = ({ navigation }) => {
 
   const brands = [
     // Define your brands data here
-    'Brand A',
-    'Brand B',
-    'Brand C',
+    'Dairy Products',
+    'Frozen Products',
+    '2M Products',
+    'Other Products',
+    'Amul Products',
     // ...
   ];
 
   const data = [
     {
       id: 1,
-      image: require('../../assets/images/shops/shop7.jpg'), // Use `require` for local images
+      image: require('../../assets/images/shops/30g-urad-masala-papad.jpg'), // Use `require` for local images
       label: 'Nandini H C Milk 500 Ml',
       mrp: 30,
       price: 25,
@@ -59,7 +64,7 @@ const Order = ({ navigation }) => {
     },
     {
       id: 2,
-      image: require('../../assets/images/shops/shop7.jpg'), // Use `require` for local images
+      image: require('../../assets/images/shops/amul-dairy-products.jpg'), // Use `require` for local images
       label: '2M Choco strands',
       mrp: 25,
       price: 20,
@@ -67,7 +72,7 @@ const Order = ({ navigation }) => {
     },
     {
       id: 3,
-      image: require('../../assets/images/shops/shop7.jpg'), // Use `require` for local images
+      image: require('../../assets/images/shops/choco-strand.jpg'), // Use `require` for local images
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
@@ -75,7 +80,7 @@ const Order = ({ navigation }) => {
     },
     {
       id: 3,
-      image: require('../../assets/images/shops/shop7.jpg'), // Use `require` for local images
+      image: require('../../assets/images/shops/frozen-products.jpg'), // Use `require` for local images
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
@@ -83,7 +88,7 @@ const Order = ({ navigation }) => {
     },
     {
       id: 3,
-      image: require('../../assets/images/shops/shop7.jpg'), // Use `require` for local images
+      image: require('../../assets/images/shops/30g-urad-masala-papad.jpg'), // Use `require` for local images
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
@@ -110,10 +115,14 @@ const Order = ({ navigation }) => {
   function handleCardModal() {
     setCartModalVisible(false)
     Toast.show({
-
       position: 'bottom',
       text1: 'Added to cart',
+      text1Style: { color: 'white', backgroundColor: 'black' },
+      type:'info',
+     
+      
     });
+    
     // alert("Added to cart")
   }
 
@@ -122,6 +131,7 @@ const Order = ({ navigation }) => {
       style={{
         flex: 1,
         backgroundColor: 'white',
+        fontFamily: 'regular',
       }}
     >
 
@@ -129,6 +139,10 @@ const Order = ({ navigation }) => {
         style={{
           flex: 1,
           padding: 16,
+          ...FONTS.body4,
+
+          marginVertical: SIZES.padding * 2,
+          textAlign: 'center'
         }}
       >
         <Header title="Order" />
@@ -186,7 +200,7 @@ const Order = ({ navigation }) => {
                 </Text>
               </View>
               <Feather
-                name="shopping-bag"
+                name="shopping-cart"
                 size={24}
                 color={COLORS.white}
               />
@@ -207,8 +221,8 @@ const Order = ({ navigation }) => {
               margin: 10
             }}
           >
-            <Text style={{ color: 'white', marginRight: 5 }}>Categories</Text>
-            <MaterialCommunityIcons name="arrow-down" size={20} color="white" />
+            <Text style={[styles.text,{ color: 'white', marginRight: 5 }]}>Categories</Text>
+            <MaterialCommunityIcons name="chevron-down" size={20} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -224,8 +238,8 @@ const Order = ({ navigation }) => {
               margin: 10
             }}
           >
-            <Text style={{ color: 'white', marginRight: 5 }}>Brands</Text>
-            <MaterialCommunityIcons name="arrow-down" size={20} color="white" />
+            <Text style={[styles.text,{ color: 'white', marginRight: 3 }]}>Brands</Text>
+            <MaterialCommunityIcons name="chevron-down" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -247,15 +261,24 @@ const Order = ({ navigation }) => {
           >
             <View
               style={{
-                width: 200, // Set the desired width
-                height: 200, // Set the desired height
+                width: 300, // Set the desired width
+                height: 300, // Set the desired height
                 backgroundColor: 'white',
                 padding: 16,
                 borderRadius: 10,
                 position: 'absolute', // Use position 'absolute'
               }}
             >
-              <ScrollView>
+              {selectedBrands.length > 0 && (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                  {selectedBrands.map((brand) => (
+                    <Text key={brand} style={{ margin: 5, padding: 5, backgroundColor: COLORS.primary, color: 'white' }}>
+                      {brand}
+                    </Text>
+                  ))}
+                </View>
+              )}
+              {/* <ScrollView>
                 {brands.map((brand) => (
                   <TouchableOpacity
                     key={brand}
@@ -269,30 +292,70 @@ const Order = ({ navigation }) => {
                     <Text>{brand}</Text>
                   </TouchableOpacity>
                 ))}
+              </ScrollView> */}
+
+              <ScrollView>
+                {brands.map((brand) => (
+                  <TouchableOpacity
+                    key={brand}
+                    onPress={() => handleBrandSelection(brand)}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <CheckBox
+                      checked={selectedBrands.includes(brand)}
+                      onPress={() => handleBrandSelection(brand)}
+                    />
+                    <Text style={styles.text}>{brand}</Text>
+                  </TouchableOpacity>
+                ))}
               </ScrollView>
 
-              {/* Apply Button */}
-              <TouchableOpacity
-                onPress={() => setBrandsModalVisible(false)}
-                style={{
-                  backgroundColor: COLORS.primary,
-                  padding: 10,
-                  borderRadius: 5,
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={{ color: 'white' }}>Apply</Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  onPress={() => setBrandsModalVisible(false)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text style={{ color: COLORS.primary, marginLeft: 100, fontSize: 20 }}>NO</Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setBrandsModalVisible(false)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+
+                  <Text style={{ color: COLORS.primary, marginLeft: 10, fontSize: 20 }}>OK</Text>
+                </TouchableOpacity>
+              </View>
+
+
             </View>
           </View>
         </Modal>
 
         {/* Search Bar */}
+        <View style={{backgroundColor:'white',padding:5}}>
         <TextInput
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => setSearchText(text)}
         />
+        </View>
+       
 
         {/* Cards */}
         <ScrollView>
@@ -300,6 +363,7 @@ const Order = ({ navigation }) => {
             <TouchableOpacity key={index} onPress={() => handleOpenCartModal(item)}>
               <View
                 style={{
+                  marginTop:5,
                   backgroundColor: 'white',
                   padding: 16,
                   borderRadius: 10,
@@ -309,18 +373,16 @@ const Order = ({ navigation }) => {
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={item.image} style={{ width: 50, height: 50, marginRight: 30 }} />
-                  <Text>{item.label}</Text>
+                  <Text style={{ fontSize: 18 }}>{item.label}</Text>
                 </View>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: 'black', marginTop: -10, marginLeft: 80 }} />
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                  <Text>MRP: ₹ {item.mrp}</Text>
-                  <Text style={{ marginLeft: 10 }}>Price: ₹ {item.price}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>MRP: ₹ {item.mrp}</Text>
+                  <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>Price: ₹ {item.price}</Text>
                   <TouchableOpacity onPress={() => handleOpenCartModal(item)} style={{ marginLeft: 100 }}>
-                    {item.favorite ? (
-                      <MaterialCommunityIcons name="heart" size={24} color="red" />
-                    ) : (
-                      <MaterialCommunityIcons name="heart" size={24} color="gray" />
-                    )}
+                   
+                      <MaterialCommunityIcons name="heart-outline" size={20} color="red" />
+                   
                   </TouchableOpacity>
                 </View>
               </View>
@@ -342,6 +404,7 @@ const Order = ({ navigation }) => {
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: 'rgba(0, 0, 0, 0.5)',
+
             }}
           >
             <View
@@ -355,7 +418,7 @@ const Order = ({ navigation }) => {
               }}
             >
               <View>
-                <Text>Almira Samosa Patti 500 Gms</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'regular' }}>Almira Samosa Patti 500 Gms</Text>
 
 
 
@@ -371,20 +434,20 @@ const Order = ({ navigation }) => {
                   {/* Table header */}
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
                     <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 10 }}>
-                      <Text>MRP</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>MRP</Text>
                     </View>
                     <View style={{ flex: 1, padding: 5 }}>
-                      <Text>₹85</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>₹85</Text>
                     </View>
                   </View>
 
                   {/* First row of dynamic content */}
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomColor: 'black' }}>
                     <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 10 }}>
-                      <Text> >0</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}> >0</Text>
                     </View>
                     <View style={{ flex: 1, padding: 5 }}>
-                      <Text>₹63.37</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>₹63.37</Text>
                     </View>
                   </View>
 
@@ -405,7 +468,7 @@ const Order = ({ navigation }) => {
                   }}
                 >
                   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Quantity:</Text>
+                    <Text style={[styles.text,{fontWeight:'bold'}]}>Qty</Text>
                   </View>
                   <View style={{ flex: 1 }}>
                     <View
@@ -423,18 +486,18 @@ const Order = ({ navigation }) => {
 
                   </View>
                 </View>
-                <Text style={{ marginLeft: 90 }}>Total :₹ 405</Text>
+                <Text style={[{ marginLeft: 90,fontWeight:'bold',...styles.text }]}>Total :₹ 405</Text>
                 <TouchableOpacity
                   onPress={handleCardModal}
                   style={{
                     backgroundColor: COLORS.primary,
                     padding: 10,
-                    borderRadius: 5,
+                    borderRadius: 15,
                     alignItems: 'center',
                     marginTop: 10,
                   }}
                 >
-                  <Text style={{ color: 'white' }}>Add to Cart</Text>
+                  <Text style={{ color: 'black',fontWeight:'bold' }}>ADD TO CART</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -449,5 +512,10 @@ const Order = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'regular',
+    fontSize: 16
+  }
+})
 export default Order
