@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   text: {
-    fontSize: width < 768 ? 14 : 16,
+    fontSize: width < 768 ? 18 : 16,
     fontFamily:'regular'
   },
 });
