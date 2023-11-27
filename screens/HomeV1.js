@@ -460,12 +460,12 @@ const HomeV1 = () => {
                         <Box text="Buy again" iconName="cart-arrow-down" />
                     </View>
                     <View style={styles.row}>
-                        <Box text="Order list" iconName="clipboard-list-outline" />
+                        <Box text="Order list" onPress={() => navigation.navigate("OrderList")} iconName="clipboard-list-outline" />
                         <Box text="Cart" onPress={() => navigation.navigate('Cart')} iconName="cart-plus" />
                     </View>
                     <View style={styles.row}>
                         <Box text="Favorites" iconName="heart-outline" />
-                        <Box text="Ledger" iconName="note-check-outline" />
+                        <Box text="Ledger" onPress={() => navigation.navigate('Ledger')} iconName="note-check-outline" />
                     </View>
                     <View style={styles.row}>
                         <Box text="Invoices" iconName="finance" />

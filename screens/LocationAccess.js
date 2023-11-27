@@ -56,7 +56,7 @@ const LocationAccess = ({ navigation }) => {
                         <Ionicons name="location-outline" size={20} color={COLORS.white} />
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.bottomText}>KRS WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP</Text>
+                <Text style={styles.bottomText}>bConnect WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP</Text>
             </View>
         </SafeAreaView>
     )

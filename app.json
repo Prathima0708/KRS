@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "KRS",
-    "slug": "KRS",
+    "name": "B Connect",
+    "slug": "bConnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -54,7 +54,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "cc79b320-12ac-4d81-872c-896cb9180581"
+        "projectId": "76ae9f98-6ca4-4c91-be53-a3bd020f7f8c"
       }
     }
   }

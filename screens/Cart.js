@@ -212,7 +212,7 @@ const Cart = ({ navigation }) => {
                 <Button
                     filled
                     title="Clear Cart"
-                   // onPress={() => navigation.navigate('PaymentMethod')}
+                    // onPress={() => navigation.navigate('PaymentMethod')}
                     style={{ marginVertical: 2, backgroundColor: 'red' }}
                 />
                 <Button
@@ -332,7 +332,7 @@ const Cart = ({ navigation }) => {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <TouchableOpacity
-  onPress={() => navigation.navigate('PaymentMethod')}
+                                    onPress={() => navigation.navigate('PaymentMethod')}
                                     style={{
                                         width: '40%',
                                         backgroundColor: COLORS.primary,
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'regular',
         fontSize: 16,
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
     container: {
         flex: 1,

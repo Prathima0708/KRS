@@ -55,6 +55,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigation from './BottomTabNavigation'
 import MainScreen from '../components/MainScreen'
 import Order from '../screens/newscreens/Order'
+import OrderList from '../screens/newscreens/OrderList'
+import LedgerScreen from '../screens/newscreens/LedgerScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -143,7 +145,10 @@ const AppNavigation = () => {
                 <Stack.Screen name="Favourite" component={Favourite}/>
                 <Stack.Screen name="TermsAndConditions" component={TermsAndConditions}/>
                 <Stack.Screen name="CaptureProduct" component={CaptureProduct}/>
+
                 <Stack.Screen name="Order" component={Order}/>
+                <Stack.Screen name="OrderList" component={OrderList}/>
+                <Stack.Screen name="Ledger" component={LedgerScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

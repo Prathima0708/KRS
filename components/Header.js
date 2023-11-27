@@ -18,13 +18,13 @@ const Header = ({ title }) => {
         />
     </TouchableOpacity>
     <Text style={styles.title}>{title}</Text>
-    <TouchableOpacity style={styles.headerIcon}>
+    {/* <TouchableOpacity style={styles.headerIcon}>
         <Image
             source={icons.more}
             resizeMode='contain'
             style={styles.moreIcon}
         />
-    </TouchableOpacity>
+    </TouchableOpacity> */}
 </View>
   )
 }
@@ -32,7 +32,8 @@ const Header = ({ title }) => {
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: "row",
-        justifyContent: "space-between",
+      
+      //  justifyContent: "space-between",
         width: "100%",
         marginBottom: 12,
         alignItems: "center"

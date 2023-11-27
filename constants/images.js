@@ -41,6 +41,7 @@ const product4 = require("../assets/images/products/product4.jpg");
 const product5 = require("../assets/images/products/product5.jpg");
 const product6 = require("../assets/images/products/product6.jpg");
 const product7 = require("../assets/images/products/product7.jpg");
+const product8 = require("../assets/images/products/product7.jpg");
 
 const bed = require("../assets/images/categories/bed.png");
 const chair = require("../assets/images/categories/chair.png");
@@ -89,6 +90,7 @@ export default {
     product5,
     product6,
     product7,
+    product8,
     bed,
     chair,
     livingroom,

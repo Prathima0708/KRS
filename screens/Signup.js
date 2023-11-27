@@ -19,13 +19,17 @@ const initialState = {
         fullName: isTestMode ? 'John Doe' : '',
         email: isTestMode ? 'example@gmail.com' : '',
         password: isTestMode ? '**********' : '',
-        confirmPassword: isTestMode ? '**********' : ''
+        confirmPassword: isTestMode ? '**********' : '',
+        companyName: isTestMode ? 'CowboyIceCream' : '',
+        address1: isTestMode ? 'Manipal' : '',
     },
     inputValidities: {
         fullName: false,
         email: false,
         password: false,
-        confirmPassword: false
+        confirmPassword: false,
+        companyName:false,
+        address1:false
     },
     formIsValid: false,
 }
@@ -50,9 +54,9 @@ const Signup = ({ navigation }) => {
     }, [error])
 
     return (
-        <LinearGradient 
-          colors={[COLORS.primary, COLORS.primary]}
-          style={{ flex: 1, backgroundColor: COLORS.blue }}>
+        <LinearGradient
+            colors={[COLORS.primary, COLORS.primary]}
+            style={{ flex: 1, backgroundColor: COLORS.blue }}>
             <StatusBar hidden={true} />
             <View style={commonStyles.header}>
                 <TouchableOpacity
@@ -106,7 +110,63 @@ const Signup = ({ navigation }) => {
                         placeholderTextColor={COLORS.black}
                         secureTextEntry={true}
                     />
-
+                   <Text style={commonStyles.inputHeader}>Company Name</Text>
+                    <Input
+                        id="companyName"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['companyName']}
+                        placeholder="CowboyIceCream"
+                        placeholderTextColor={COLORS.black}
+                    />
+                     <Text style={commonStyles.inputHeader}>Address Line 1</Text>
+                    <Input
+                        id="address1"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['address1']}
+                        placeholder="Manipal"
+                        placeholderTextColor={COLORS.black}
+                    />
+                     
+                     <Text style={commonStyles.inputHeader}>City</Text>
+                    <Input
+                        id="city"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['city']}
+                        placeholder="Manipal"
+                        placeholderTextColor={COLORS.black}
+                    />
+                     <Text style={commonStyles.inputHeader}>Taluk</Text>
+                    <Input
+                        id="taluk"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['taluk']}
+                        placeholder="Udupi"
+                        placeholderTextColor={COLORS.black}
+                    />
+                     <Text style={commonStyles.inputHeader}>District</Text>
+                    <Input
+                        id="district"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['district']}
+                        placeholder="Udupi"
+                        placeholderTextColor={COLORS.black}
+                    />
+                    <Text style={commonStyles.inputHeader}>State</Text>
+                    <Input
+                        id="state"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['state']}
+                        placeholder="Karnataka"
+                        placeholderTextColor={COLORS.black}
+                    />
+                     <Text style={commonStyles.inputHeader}>Pincode</Text>
+                    <Input
+                        id="pincode"
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['pincode']}
+                        placeholder="576104"
+                        placeholderTextColor={COLORS.black}
+                    />
                     <Button
                         title="SIGN UP"
                         isLoading={isLoading}
