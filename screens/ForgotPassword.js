@@ -70,10 +70,11 @@ const ForgotPassword = ({ navigation }) => {
                     keyboardType="email-address"
                 />
                 <Button
-                    title="SEND CODE"
+                    title="Next"
                     isLoading={isLoading}
                     filled
-                    onPress={() => navigation.navigate('Verification')}
+                    // onPress={() => navigation.navigate('Verification',{initialState})}
+                    onPress={() => navigation.navigate('UpdatePasswordScreen',{initialState})}
                     style={commonStyles.btn1}
                 />
             </Animatable.View>

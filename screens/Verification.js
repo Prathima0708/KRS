@@ -25,6 +25,8 @@ const Verification = ({ navigation }) => {
     }, [error])
 
     const handleVerify = async () => {
+      console.log("Email",route.params.email);
+      console.log("Pin",pin)
         try {
           setIsLoading(true);
     
@@ -69,6 +71,11 @@ const Verification = ({ navigation }) => {
         }
       };
 
+      function optChangeHandler(event){
+        const value = event.nativeEvent.text;
+        setPin(value)
+      }
+
     return (
         <LinearGradient 
           colors={[COLORS.primary, COLORS.primary]}
@@ -97,9 +104,10 @@ const Verification = ({ navigation }) => {
                 </View>
                 <OTPTextInput
                     textInputStyle={commonStyles.OTPStyle}
-                    inputCount={4}
+                    inputCount={6}
                     tintColor={COLORS.primary}
-                    onChange={(pin) => setPin(pin)}
+                    // onChange={(pin) => setPin(pin)}
+                    onChange={optChangeHandler}
                 />
                 <Button
                     title="VERIFY"

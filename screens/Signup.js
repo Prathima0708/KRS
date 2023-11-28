@@ -12,6 +12,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { login_URL, reg_URL } from '../constants/utils/URL'
+import {  FONTS, icons } from '../constants'
 
 const isTestMode = true
 
@@ -133,7 +134,7 @@ const Signup = ({ navigation }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            fullName: formData.fullName,
+            name: formData.fullName,
             email: formData.email,
             password: formData.password,
           }),
@@ -297,6 +298,18 @@ const Signup = ({ navigation }) => {
                         style={commonStyles.btn1}
                     />
                 </KeyboardAwareScrollView>
+                <View style={commonStyles.center}>
+                    <Text style={{ ...FONTS.body4, color: COLORS.black }}>
+                        Already have account?{' '}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Login')}
+                    >
+                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
+                            Login In
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </Animatable.View>
         </LinearGradient>
     )

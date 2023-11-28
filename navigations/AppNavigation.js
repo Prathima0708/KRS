@@ -57,6 +57,7 @@ import MainScreen from '../components/MainScreen'
 import Order from '../screens/newscreens/Order'
 import OrderList from '../screens/newscreens/OrderList'
 import LedgerScreen from '../screens/newscreens/LedgerScreen'
+import UpdatePasswordScreen from '../screens/UpdatePasswordScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -105,6 +106,7 @@ const AppNavigation = () => {
                 {/* <Stack.Screen name="Home" component={MainScreen}/> */}
                 <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
                 <Stack.Screen name="ResetPassword" component={ResetPassword}/>
+                <Stack.Screen name="UpdatePasswordScreen" component={UpdatePasswordScreen}/>
                 <Stack.Screen name="Verification" component={Verification}/>
                 <Stack.Screen name="LocationAccess" component={LocationAccess}/>
                 <Stack.Screen name="Main" component={BottomTabNavigation}/>

@@ -41,7 +41,7 @@ const Order = ({ navigation }) => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [isCardClicked, setIsCardClicked] = useState(false);
-
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   const brands = [
     // Define your brands data here
@@ -107,9 +107,11 @@ const Order = ({ navigation }) => {
     }
   };
 
-  const handleOpenCartModal = (product) => {
+  const handleOpenCartModal = (item) => {
+    console.log(item.id)
     setIsCardClicked(!isCardClicked);
-    setCartModalVisible(true);
+    setCartModalVisible(false);
+    setSelectedCardIndex(item.id);
   };
 
   function handleCardModal() {
@@ -360,7 +362,7 @@ const Order = ({ navigation }) => {
         {/* Cards */}
         <ScrollView>
           {data.map((item, index) => (
-            <TouchableOpacity key={index} onPress={() => handleOpenCartModal(item)}>
+            
               <View
                 style={{
                   marginTop:5,
@@ -368,11 +370,14 @@ const Order = ({ navigation }) => {
                   padding: 16,
                   borderRadius: 10,
                   marginBottom: 16,
+                
                   elevation: isCardClicked ? 5 : 0, // Remove shadow when card is clicked
                 }}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image source={item.image} style={{ width: 50, height: 50, marginRight: 30 }} />
+                  <TouchableOpacity key={index} onPress={() => handleOpenCartModal(item)}>
+                    <Image source={item.image} style={{ width: 50, height: 50, marginRight: 30 }} />
+                  </TouchableOpacity>
                   <Text style={{ fontSize: 18 }}>{item.label}</Text>
                 </View>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: 'black', marginTop: -10, marginLeft: 80 }} />
@@ -381,12 +386,13 @@ const Order = ({ navigation }) => {
                   <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>Price: ₹ {item.price}</Text>
                   <TouchableOpacity onPress={() => handleOpenCartModal(item)} style={{ marginLeft: 100 }}>
                    
-                      <MaterialCommunityIcons name="heart-outline" size={20} color="red" />
+                      <MaterialCommunityIcons 
+                      name={selectedCardIndex===item.id ? "heart" : "heart-outline"} size={20} color="red" />
                    
                   </TouchableOpacity>
                 </View>
               </View>
-            </TouchableOpacity>
+            
           ))}
 
 
