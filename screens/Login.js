@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { COLORS, FONTS, icons } from '../constants'
 import Checkbox from 'expo-checkbox'
-import * as Animatable from "react-native-animatable"
+import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { validateInput } from '../utils/actions/formActions'
@@ -10,6 +10,7 @@ import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { LinearGradient } from 'expo-linear-gradient'
+import { login_URL } from '../constants/utils/URL'
 
 const isTestMode = true
 
@@ -26,24 +27,68 @@ const initialState = {
 }
 
 const Login = ({ navigation }) => {
-    const [isChecked, setChecked] = useState(false);
+    const [isChecked, setChecked] = useState(false)
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [formState, dispatchFormState] = useReducer(reducer, initialState)
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    })
 
-    const inputChangedHandler = useCallback(
-        (inputId, inputValue) => {
-            const result = validateInput(inputId, inputValue)
-            dispatchFormState({ inputId, validationResult: result, inputValue })
-        },
-        [dispatchFormState]
-    )
+    // const inputChangedHandler = useCallback(
+    //     (inputId, inputValue) => {
+    //         const result = validateInput(inputId, inputValue)
+    //         dispatchFormState({ inputId, validationResult: result, inputValue })
+    //     },
+    //     [dispatchFormState]
+    // )
+
+    const inputChangedHandler = (id, value) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [id]: value,
+        }))
+    }
 
     useEffect(() => {
         if (error) {
             Alert.alert('An error occured', error)
         }
     }, [error])
+
+    const onSubmit = async () => {
+        try {
+            setIsLoading(true)
+
+            const response = await fetch(`${login_URL}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            })
+
+            if (response.ok) {
+                const responseData = await response.json()
+                console.log('API response:', responseData)
+                // Handle successful signup, e.g., navigate to the login screen
+                navigation.navigate('LocationAccess')
+            } else {
+               // throw new Error('Signin failed')
+                
+            }
+            navigation.navigate('LocationAccess')
+        } catch (error) {
+            console.error('Error during signin:', error)
+            // Handle error, e.g., display an error message to the user
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     // implementing facebook authentication
     const facebookAuthHandler = () => {
@@ -61,22 +106,27 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <LinearGradient colors={[COLORS.primary, COLORS.primary]} style={{ flex: 1, backgroundColor: COLORS.blue }}>
+        <LinearGradient
+            colors={[COLORS.primary, COLORS.primary]}
+            style={{ flex: 1, backgroundColor: COLORS.blue }}
+        >
             <StatusBar hidden />
             <View style={commonStyles.header}>
                 <Text style={commonStyles.headerTitle}>Log In</Text>
-                <Text
-                    style={commonStyles.subHeaderTitle}>Please sign in to your existing account</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    Please sign in to your existing account
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
+                style={commonStyles.footer}
+            >
                 <Text style={commonStyles.inputHeader}>Email</Text>
                 <Input
                     id="email"
                     onInputChanged={inputChangedHandler}
                     errorText={formState.inputValidities['email']}
-                    placeholder="example@gmail.com"
+                    placeholder="Email"
                     placeholderTextColor={COLORS.black}
                     keyboardType="email-address"
                 />
@@ -92,7 +142,9 @@ const Login = ({ navigation }) => {
                 />
 
                 <View style={commonStyles.checkBoxContainer}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                         <Checkbox
                             style={commonStyles.checkbox}
                             value={isChecked}
@@ -102,9 +154,11 @@ const Login = ({ navigation }) => {
                         <Text style={{ ...FONTS.body4 }}>Remenber me</Text>
                     </View>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("ForgotPassword")}
+                        onPress={() => navigation.navigate('ForgotPassword')}
                     >
-                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>Forgot Password ?</Text>
+                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
+                            Forgot Password ?
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
@@ -112,18 +166,30 @@ const Login = ({ navigation }) => {
                     title="LOG IN"
                     isLoading={isLoading}
                     filled
-                    onPress={() => navigation.navigate('LocationAccess')}
+                    onPress={onSubmit}
                     style={commonStyles.btn}
                 />
                 <View style={commonStyles.center}>
-                    <Text style={{ ...FONTS.body4, color: COLORS.black }}>Don't have an account?{" "}</Text>
+                    <Text style={{ ...FONTS.body4, color: COLORS.black }}>
+                        Don't have an account?{' '}
+                    </Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("Signup")}
+                        onPress={() => navigation.navigate('Signup')}
                     >
-                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>SIGN UP</Text>
+                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
+                            SIGN UP
+                        </Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={{ ...FONTS.body4, color: COLORS.black, textAlign: 'center' }}>Or</Text>
+                <Text
+                    style={{
+                        ...FONTS.body4,
+                        color: COLORS.black,
+                        textAlign: 'center',
+                    }}
+                >
+                    Or
+                </Text>
 
                 <View style={commonStyles.socialContainer}>
                     <TouchableOpacity
@@ -146,7 +212,6 @@ const Login = ({ navigation }) => {
                             style={commonStyles.socialLogo}
                         />
                     </TouchableOpacity>
-                 
                 </View>
             </Animatable.View>
         </LinearGradient>

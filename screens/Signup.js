@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import { View, Text, TouchableOpacity, ImageBackground, Alert } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { COLORS, images } from '../constants'
 import * as Animatable from 'react-native-animatable'
@@ -43,6 +43,7 @@ const Signup = ({ navigation }) => {
         fullName: '',
         email: '',
         password: '',
+        passwordConfirm:''
     })
 
     // const inputChangedHandler = useCallback(
@@ -61,42 +62,108 @@ const Signup = ({ navigation }) => {
     }
 
     useEffect(() => {
+      setFormData({
+        fullName: '',
+        email: '',
+        password: '',
+        passwordConfirm:''
+      })
         if (error) {
             Alert.alert('An error occured', error)
         }
     }, [error])
+    
+    // const onSubmit = async () => {
+    //     try {
+    //         setIsLoading(true)
+    //         if (formData.password !== formData.passwordConfirm) {
+    //           alert('Passwords do not match');
+    //         }
+
+    //         const response = await fetch(`${reg_URL}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 fullName: formData.fullName,
+    //                 email: formData.email,
+    //                 password: formData.password,
+    //             }),
+    //         })
+
+    //         if (response.ok) {
+    //             const responseData = await response.json()
+    //             console.log('API response:', responseData)
+    //             // Handle successful signup, e.g., navigate to the login screen
+    //             navigation.navigate('Login')
+    //             setFormData({
+    //               fullName: '',
+    //               email: '',
+    //               password: '',
+    //             })
+    //         } else {
+    //             throw new Error('Signup failed')
+    //         }
+    //     } catch (error) {
+    //         console.error('Error during signup:', error)
+    //         // Handle error, e.g., display an error message to the user
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+
     const onSubmit = async () => {
-        try {
-            setIsLoading(true)
+      try {
+        setIsLoading(true);
 
-            const response = await fetch(`${reg_URL}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fullName: formData.fullName,
-                    email: formData.email,
-                    password: formData.password,
-                }),
-            })
-
-            if (response.ok) {
-                const responseData = await response.json()
-                console.log('API response:', responseData)
-                // Handle successful signup, e.g., navigate to the login screen
-                navigation.navigate('Login')
-            } else {
-                throw new Error('Signup failed')
-            }
-        } catch (error) {
-            console.error('Error during signup:', error)
-            // Handle error, e.g., display an error message to the user
-        } finally {
-            setIsLoading(false)
+        if (!formData.fullName || !formData.email || !formData.password || !formData.passwordConfirm) {
+            alert('Please fill in all fields');
+            return
+          }
+    
+        // Check if passwords match
+        if (formData.password !== formData.passwordConfirm) {
+          throw new Error('Passwords do not match');
         }
-    }
-
+    
+        const response = await fetch(`${reg_URL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullName: formData.fullName,
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+    
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log('API response:', responseData);
+          Alert.alert('Success', responseData.status, [
+            { text: 'OK', onPress: () => navigation.navigate('Verification',{email:formData.email}) },
+          ]);
+         // navigation.navigate('Verification');
+        } else {
+          throw new Error('Signup failed');
+        }
+      } catch (error) {
+        console.error('Error during signup:', error);
+    
+        // Show an alert to the user when passwords do not match
+        if (error.message === 'Passwords do not match') {
+          alert('Passwords do not match', 'Passwords do not match');
+        } else {
+          // Handle other errors or display a general error message
+          alert('Error', 'Signup failed. Please try again.');
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
     return (
         <LinearGradient
             colors={[COLORS.primary, COLORS.primary]}
@@ -129,7 +196,7 @@ const Signup = ({ navigation }) => {
                         id="fullName"
                         onInputChanged={inputChangedHandler}
                         errorText={formState.inputValidities['fullName']}
-                        placeholder="John Doe"
+                        placeholder="Name"
                         placeholderTextColor={COLORS.black}
                     />
                     <Text style={commonStyles.inputHeader}>Email</Text>
@@ -137,7 +204,7 @@ const Signup = ({ navigation }) => {
                         id="email"
                         onInputChanged={inputChangedHandler}
                         errorText={formState.inputValidities['email']}
-                        placeholder="example@gmail.com"
+                        placeholder="Email"
                         placeholderTextColor={COLORS.black}
                         keyboardType="email-address"
                     />
