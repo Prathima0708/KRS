@@ -34,6 +34,7 @@ import Toast from 'react-native-toast-message';
 import { COLORS } from '../../constants'
 import Header from '../../components/Header'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { addToCart_URL, favoriteItemPost_URL } from '../../constants/utils/URL';
 
 const Order = ({ navigation }) => {
   const [brandsModalVisible, setBrandsModalVisible] = useState(false);
@@ -42,6 +43,11 @@ const Order = ({ navigation }) => {
   const [searchText, setSearchText] = useState('');
   const [isCardClicked, setIsCardClicked] = useState(false);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+
+  const [favoriteItems, setFavoriteItems] = useState([]);
+
+  const [selectedItem, setSelectedItem] = useState({});
+
 
   const brands = [
     // Define your brands data here
@@ -107,14 +113,78 @@ const Order = ({ navigation }) => {
     }
   };
 
-  const handleOpenCartModal = (item) => {
-    console.log(item.id)
+  const handleFavoriteItem= (item) =>{
+
     setIsCardClicked(!isCardClicked);
     setCartModalVisible(false);
     setSelectedCardIndex(item.id);
+
+    const object={
+      item_id: item.id,
+      clicked_status: true
+    }
+
+    const existingItemIndex = favoriteItems.findIndex(
+      (item) => item.item_id === object.item_id
+    );
+  
+    if (existingItemIndex !== -1) {
+      // If the item exists, toggle the clicked_status
+      const updatedItems = [...favoriteItems];
+      updatedItems[existingItemIndex].clicked_status = !updatedItems[existingItemIndex]
+        .clicked_status;
+      setFavoriteItems(updatedItems);
+    } else {
+      // If the item does not exist, add it with clicked_status as true
+      setFavoriteItems((prevArray) => [...prevArray, object]);
+    }
+
+    console.log(favoriteItems)
+
+
+
+    const itemIdsArray = favoriteItems.map((item)=>item.item_id)
+
+    console.log(itemIdsArray);
+
+
+      const response =  fetch(`${favoriteItemPost_URL}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              userId:"1",
+              productIds:[
+                itemIdsArray
+              ]
+          }),
+      })
+
+      if (response.ok) {
+          const responseData =  response.json()
+          console.log('API response:', responseData)
+          // Handle successful signup, e.g., navigate to the login screen
+  
+      } else {
+         // throw new Error('Signin failed')
+          
+      }
+
+  }
+  const handleOpenCartModal = (item) => {
+
+
+    setIsCardClicked(!isCardClicked);
+    setCartModalVisible(true);
+    setSelectedCardIndex(item.id);
+
+    setSelectedItem(item);
+
+    
   };
 
-  function handleCardModal() {
+  const handleCardModal = async () => {
     setCartModalVisible(false)
     Toast.show({
       position: 'bottom',
@@ -124,9 +194,56 @@ const Order = ({ navigation }) => {
      
       
     });
-    
-    // alert("Added to cart")
+
+    // try {
+    //   // setIsLoading(true)
+
+    //       const response = await fetch(`${addToCart_URL}`, {
+    //           method: 'POST',
+    //           headers: {
+    //               'Content-Type': 'application/json',
+    //           },
+    //           body: JSON.stringify({
+    //             userId: "string",
+    //             "orderDate": "2023-11-29T11:19:45.292Z",
+    //             "items": [
+    //               {
+    //                 "productId": "string",
+    //                 "quantity": 0,
+    //                 "price": 0
+    //               }
+    //             ],
+    //             "status": "PENDING",
+    //             "total": 0,
+    //             "deliveryType": "string",
+    //             "addressId": "string"
+    //           }),
+    //       })
+
+    //       if (response.ok) {
+    //           const responseData = await response.json()
+    //           console.log('API response:', responseData)
+    //           // Handle successful signup, e.g., navigate to the login screen
+    //           navigation.navigate('LocationAccess')
+    //       } else {
+    //         // throw new Error('Signin failed')
+              
+    //       }
+    //       navigation.navigate('LocationAccess')
+    //   } catch (error) {
+    //       console.error('Error during signin:', error)
+    //       // Handle error, e.g., display an error message to the user
+    //   } finally {
+    //       // setIsLoading(false)
+    //   }
   }
+  // function handleCardModal() {
+    
+
+
+    
+  //   // alert("Added to cart")
+  // }
 
   return (
     <SafeAreaView
@@ -384,10 +501,14 @@ const Order = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                   <Text style={{ fontWeight: 'bold' }}>MRP: ₹ {item.mrp}</Text>
                   <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>Price: ₹ {item.price}</Text>
-                  <TouchableOpacity onPress={() => handleOpenCartModal(item)} style={{ marginLeft: 100 }}>
+                  <TouchableOpacity onPress={() => handleFavoriteItem(item)} style={{ marginLeft: 100 }}>
                    
                       <MaterialCommunityIcons 
-                      name={selectedCardIndex===item.id ? "heart" : "heart-outline"} size={20} color="red" />
+                      name={favoriteItems.find((favItem) => favItem.item_id === item.id)?.clicked_status ? "heart" : "heart-outline"}
+                      size={20}
+                      color="red"
+                      // name={favoriteItems.===item.id ? "heart" : "heart-outline"} size={20} color="red" 
+                      />
                    
                   </TouchableOpacity>
                 </View>
@@ -424,7 +545,7 @@ const Order = ({ navigation }) => {
               }}
             >
               <View>
-                <Text style={{ fontSize: 16, fontFamily: 'regular' }}>Almira Samosa Patti 500 Gms</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'regular' }}>{selectedItem.label}</Text>
 
 
 
@@ -443,7 +564,7 @@ const Order = ({ navigation }) => {
                       <Text style={[styles.text,{fontWeight:'bold'}]}>MRP</Text>
                     </View>
                     <View style={{ flex: 1, padding: 5 }}>
-                      <Text style={[styles.text,{fontWeight:'bold'}]}>₹85</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>{selectedItem.mrp}</Text>
                     </View>
                   </View>
 

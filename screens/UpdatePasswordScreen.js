@@ -50,14 +50,15 @@ const UpdatePasswordScreen=({navigation})=>{
 
             console.log(route.params.initialState)
             console.log(formData)
-            // const response = await fetch(`${login_URL}`, {
+            // const response = await fetch(`${resetPassword_URL}`, {
             //     method: 'POST',
             //     headers: {
             //         'Content-Type': 'application/json',
             //     },
             //     body: JSON.stringify({
-            //         email: formData.email,
-            //         password: formData.password,
+            //         newPassword: initialState.inputValidities.reentered_password,
+            //         token: "string",
+            //         email: "string"
             //     }),
             // })
 
