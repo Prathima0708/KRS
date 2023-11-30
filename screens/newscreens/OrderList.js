@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import { View } from 'react-native'
 import { Text } from 'react-native'
@@ -7,6 +7,8 @@ import { FONTS, SIZES } from '../../constants';
 import { StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native'
+import { getUserOrders_URL } from '../../constants/utils/URL'
+import axios from 'axios'
 
 const OrderList = () => {
     const dummyData = [
@@ -41,6 +43,26 @@ const OrderList = () => {
 
         // Add more dummy data as needed
       ];
+
+
+
+      const [allOrders,setOrdersList]=useState([]); 
+
+      useEffect(() => {
+        async function getAllProducts() {
+          try {
+            const res = await axios.post(`${getUserOrders_URL}`);
+      
+            setOrdersList(res.data);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      
+        getAllProducts();
+      }, []);
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
