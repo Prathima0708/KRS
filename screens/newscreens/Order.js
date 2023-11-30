@@ -20,7 +20,7 @@ import {
 
   Fontisto,
 } from '@expo/vector-icons'
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Input } from 'react-native-elements';
 
 import shop1 from "../../assets/images/shops/shop7.jpg"
 import { images } from "../../constants/images"
@@ -73,7 +73,7 @@ const Order = ({ navigation }) => {
     {
       id: 1,
       image: require('../../assets/images/shops/30g-urad-masala-papad.jpg'), // Use `require` for local images
-      label: 'Nandini H C Milk 500 Ml',
+      name: 'Nandini H C Milk 500 Ml',
       mrp: 30,
       price: 25,
       description:'Product description goes here',
@@ -84,7 +84,7 @@ const Order = ({ navigation }) => {
     {
       id: 2,
       image: require('../../assets/images/shops/amul-dairy-products.jpg'), // Use `require` for local images
-      label: '2M Choco strands',
+      name: '2M Choco strands',
       mrp: 25,
       price: 20,
       description:'Product description goes here',
@@ -95,7 +95,7 @@ const Order = ({ navigation }) => {
     {
       id: 3,
       image: require('../../assets/images/shops/choco-strand.jpg'), // Use `require` for local images
-      label: '2M Dark choco chips ',
+      name: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
       description:'Product description goes here',
@@ -106,7 +106,7 @@ const Order = ({ navigation }) => {
     {
       id: 3,
       image: require('../../assets/images/shops/frozen-products.jpg'), // Use `require` for local images
-      label: '2M Dark choco chips ',
+      name: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
       description:'Product description goes here',
@@ -117,7 +117,7 @@ const Order = ({ navigation }) => {
     {
       id: 3,
       image: require('../../assets/images/shops/30g-urad-masala-papad.jpg'), // Use `require` for local images
-      label: '2M Dark choco chips ',
+      name: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
       description:'Product description goes here',
@@ -668,7 +668,7 @@ const Order = ({ navigation }) => {
 
         {/* Cards */}
         <ScrollView>
-          {allProducts.map((item, index) => (
+          {data.map((item, index) => (
             
               <View
                 style={{

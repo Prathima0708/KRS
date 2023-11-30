@@ -86,7 +86,7 @@ const Login = ({ navigation }) => {
                 
             }
             console.log(response)
-            // navigation.navigate('LocationAccess')
+            navigation.navigate('LocationAccess')
         } catch (error) {
             console.error('Error during signin:', error)
             // Handle error, e.g., display an error message to the user
