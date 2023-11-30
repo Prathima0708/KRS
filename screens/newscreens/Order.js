@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -34,7 +34,8 @@ import Toast from 'react-native-toast-message';
 import { COLORS } from '../../constants'
 import Header from '../../components/Header'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addToCart_URL, favoriteItemPost_URL } from '../../constants/utils/URL';
+import { addToCart_URL, favoriteItemPost_URL, getBrands_URL } from '../../constants/utils/URL';
+import axios from 'axios';
 
 const Order = ({ navigation }) => {
   const [brandsModalVisible, setBrandsModalVisible] = useState(false);
@@ -48,16 +49,18 @@ const Order = ({ navigation }) => {
 
   const [selectedItem, setSelectedItem] = useState({});
 
+  const [brands,setBrands]=useState([])
 
-  const brands = [
-    // Define your brands data here
-    'Dairy Products',
-    'Frozen Products',
-    '2M Products',
-    'Other Products',
-    'Amul Products',
-    // ...
-  ];
+
+  // const brands = [
+  //   // Define your brands data here
+  //   'Dairy Products',
+  //   'Frozen Products',
+  //   '2M Products',
+  //   'Other Products',
+  //   'Amul Products',
+  //   // ...
+  // ];
 
   const data = [
     {
@@ -104,6 +107,26 @@ const Order = ({ navigation }) => {
     // Add more items as needed
   ];
 
+  useEffect(() => {
+    async function getBrands() {
+      try {
+        const res = await axios.get(`${getBrands_URL}`);
+        console.log('brands', res.data);
+  
+        // Extracting the 'name' property from each object in the array
+        const brandNames = res.data.map(brand => brand.name);
+        
+        // Setting the extracted names in the state
+        setBrands(brandNames);
+  
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  
+    getBrands();
+  }, []);
+  
 
   const handleBrandSelection = (brand) => {
     if (selectedBrands.includes(brand)) {
