@@ -92,8 +92,8 @@ export const commonStyles = StyleSheet.create({
         borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 10,
-        height: 58,
-        width: 58,
+        height: 48,
+        width: 48,
         borderBottomWidth: 1,
     },
     header1Icon:{
