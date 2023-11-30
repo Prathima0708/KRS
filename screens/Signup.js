@@ -146,6 +146,13 @@ const Signup = ({ navigation }) => {
           Alert.alert('Success', responseData.status, [
             { text: 'OK', onPress: () => navigation.navigate('Verification',{email:formData.email}) },
           ]);
+
+          setFormData({
+            fullName: '',
+            email: '',
+            password: '',
+            passwordConfirm:''
+          })
          // navigation.navigate('Verification');
         } else {
           throw new Error('Signup failed');
