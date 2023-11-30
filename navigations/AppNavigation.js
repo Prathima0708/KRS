@@ -49,7 +49,8 @@ import { Onboarding1,
     CancelOrders,
     OpenShops,
     TermsAndConditions,
-    CaptureProduct
+    CaptureProduct,
+    MyOrders
 } from '../screens'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigation from './BottomTabNavigation'
@@ -147,7 +148,7 @@ const AppNavigation = () => {
                 <Stack.Screen name="Favourite" component={Favourite}/>
                 <Stack.Screen name="TermsAndConditions" component={TermsAndConditions}/>
                 <Stack.Screen name="CaptureProduct" component={CaptureProduct}/>
-
+                <Stack.Screen name="Orders" component={MyOrders}/>
                 <Stack.Screen name="Order" component={Order}/>
                 <Stack.Screen name="OrderList" component={OrderList}/>
                 <Stack.Screen name="Ledger" component={LedgerScreen}/>

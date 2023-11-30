@@ -456,8 +456,8 @@ const HomeV1 = () => {
 
 
                     <View style={styles.row}>
-                        <Box text="Products" onPress={() => navigation.navigate("Order")} iconName="cart-check" />
-                        <Box text="Buy again" iconName="cart-arrow-down" />
+                        <Box text="Products" onPress={() => navigation.navigate("Order")} iconName="shopping" />
+                        <Box text="Buy again" iconName="cart-arrow-down" onPress={() => navigation.navigate("History")} />
                     </View>
                     <View style={styles.row}>
                         <Box text="Order list" onPress={() => navigation.navigate("OrderList")} iconName="clipboard-list-outline" />
@@ -469,7 +469,7 @@ const HomeV1 = () => {
                     </View>
                     <View style={styles.row}>
                         <Box text="Invoices" iconName="finance" />
-                        <Box text="Return" iconName="hand-coin" />
+                        <Box text="Return" iconName="hand-coin" onPress={() => navigation.navigate('Orders')} />
                     </View>
                 </View>
 

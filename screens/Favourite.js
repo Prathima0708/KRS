@@ -1,17 +1,32 @@
 import { View, FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS } from '../constants'
 import { ScrollView } from 'react-native-virtualized-view'
 import FavouriteCard from '../components/FavouriteCard'
 import { products } from '../data/products'
 import Header from '../components/Header'
+import { getFavorites_URL } from '../constants/utils/URL'
 
 const Favourite = ({ navigation }) => {
     /***
      * Render User favourite Shops
      */
+    const [favorites,setFavorites]=useState([]); 
 
+      useEffect(() => {
+        async function getAllFavorites() {
+          try {
+            const res = await axios.post(`${getFavorites_URL}`);
+      
+            setFavorites(res.data);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      
+        getAllFavorites();
+      }, []);
     function renderMyFavouriteShops() {
         return (
             <View>
