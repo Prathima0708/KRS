@@ -34,13 +34,17 @@ import Toast from 'react-native-toast-message';
 import { COLORS } from '../../constants'
 import Header from '../../components/Header'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addToCart_URL, favoriteItemPost_URL, getBrands_URL } from '../../constants/utils/URL';
+import { addToCart_URL, favoriteItemPost_URL, getAllProducts_URL, getBrands_URL, getCategories_URL } from '../../constants/utils/URL';
 import axios from 'axios';
 
 const Order = ({ navigation }) => {
   const [brandsModalVisible, setBrandsModalVisible] = useState(false);
+  const [categoriesModalVisible, setCategoriesModalVisible] = useState(false);
+
   const [cartModalVisible, setCartModalVisible] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const [searchText, setSearchText] = useState('');
   const [isCardClicked, setIsCardClicked] = useState(false);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
@@ -50,6 +54,9 @@ const Order = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState({});
 
   const [brands,setBrands]=useState([])
+  const [categories,setCategories]=useState([])
+
+ const [allProducts,setAllProducts]=useState([]); 
 
 
   // const brands = [
@@ -69,6 +76,9 @@ const Order = ({ navigation }) => {
       label: 'Nandini H C Milk 500 Ml',
       mrp: 30,
       price: 25,
+      description:'Product description goes here',
+      category:'string',
+      brand:"string",
       favorite: false,
     },
     {
@@ -77,6 +87,9 @@ const Order = ({ navigation }) => {
       label: '2M Choco strands',
       mrp: 25,
       price: 20,
+      description:'Product description goes here',
+      category:'string',
+      brand:"string",
       favorite: true,
     },
     {
@@ -85,6 +98,9 @@ const Order = ({ navigation }) => {
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
+      description:'Product description goes here',
+      category:'string',
+      brand:"string",
       favorite: true,
     },
     {
@@ -93,6 +109,9 @@ const Order = ({ navigation }) => {
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
+      description:'Product description goes here',
+      category:'string',
+      brand:"string",
       favorite: true,
     },
     {
@@ -101,11 +120,50 @@ const Order = ({ navigation }) => {
       label: '2M Dark choco chips ',
       mrp: 25,
       price: 20,
+      description:'Product description goes here',
+      category:'string',
+      brand:"string",
       favorite: true,
     },
 
     // Add more items as needed
   ];
+
+
+  useEffect(() => {
+    async function getAllProducts() {
+      try {
+        const res = await axios.post(`${getAllProducts_URL}`);
+  
+        setAllProducts(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  
+    getAllProducts();
+  }, []);
+
+  useEffect(() => {
+    async function getCategories() {
+      try {
+        const res = await axios.get(`${getCategories_URL}`);
+  
+        // Extracting the 'name' property from each object in the array
+        const categoriesNames = res.data.map(categories => categories.name);
+        
+        // Setting the extracted names in the state
+        setCategories(categoriesNames);
+  
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  
+    getCategories();
+  }, []);
+
+
 
   useEffect(() => {
     async function getBrands() {
@@ -133,6 +191,14 @@ const Order = ({ navigation }) => {
       setSelectedBrands(selectedBrands.filter((item) => item !== brand));
     } else {
       setSelectedBrands([...selectedBrands, brand]);
+    }
+  };
+
+  const handleCategorySelection = (brand) => {
+    if (selectedCategories.includes(brand)) {
+      setSelectedCategories(selectedCategories.filter((item) => item !== brand));
+    } else {
+      setSelectedCategories([...selectedCategories, brand]);
     }
   };
 
@@ -204,7 +270,7 @@ const Order = ({ navigation }) => {
 
     setSelectedItem(item);
 
-    
+    console.log(selectedItem)
   };
 
   const handleCardModal = async () => {
@@ -351,7 +417,7 @@ const Order = ({ navigation }) => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity
-            onPress={() => setCategoryModalVisible(true)}
+            onPress={() => setCategoriesModalVisible(true)}
             style={{
               width: '40%',
               backgroundColor: COLORS.primary,
@@ -385,7 +451,108 @@ const Order = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
+        {/* Category Modal */}
 
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={categoriesModalVisible}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <View
+              style={{
+                width: 300, // Set the desired width
+                height: 300, // Set the desired height
+                backgroundColor: 'white',
+                padding: 16,
+                borderRadius: 10,
+                position: 'absolute', // Use position 'absolute'
+              }}
+            >
+              {selectedCategories.length > 0 && (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                  {selectedCategories.map((categories) => (
+                    <Text key={categories} style={{ margin: 5, padding: 5, backgroundColor: COLORS.primary, color: 'white' }}>
+                      {categories}
+                    </Text>
+                  ))}
+                </View>
+              )}
+              {/* <ScrollView>
+                {brands.map((brand) => (
+                  <TouchableOpacity
+                    key={brand}
+                    onPress={() => handleBrandSelection(brand)}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text>{selectedBrands.includes(brand) ? '\u2713' : ' '}</Text>
+                    <Text>{brand}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView> */}
+
+              <ScrollView>
+                {categories.map((categories) => (
+                  <TouchableOpacity
+                    key={categories}
+                    onPress={() => handleCategorySelection(categories)}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <CheckBox
+                      checked={selectedCategories.includes(categories)}
+                      onPress={() => handleCategorySelection(categories)}
+                    />
+                    <Text style={styles.text}>{categories}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  onPress={() => setCategoriesModalVisible(false)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text style={{ color: COLORS.primary, marginLeft: 100, fontSize: 20 }}>NO</Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setCategoriesModalVisible(false)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+
+                  <Text style={{ color: COLORS.primary, marginLeft: 10, fontSize: 20 }}>OK</Text>
+                </TouchableOpacity>
+              </View>
+
+
+            </View>
+          </View>
+        </Modal>
 
         {/* Brands Modal */}
         <Modal
@@ -501,7 +668,7 @@ const Order = ({ navigation }) => {
 
         {/* Cards */}
         <ScrollView>
-          {data.map((item, index) => (
+          {allProducts.map((item, index) => (
             
               <View
                 style={{
@@ -518,11 +685,11 @@ const Order = ({ navigation }) => {
                   <TouchableOpacity key={index} onPress={() => handleOpenCartModal(item)}>
                     <Image source={item.image} style={{ width: 50, height: 50, marginRight: 30 }} />
                   </TouchableOpacity>
-                  <Text style={{ fontSize: 18 }}>{item.label}</Text>
+                  <Text style={{ fontSize: 18 }}>{item.name}</Text>
                 </View>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: 'black', marginTop: -10, marginLeft: 80 }} />
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                  <Text style={{ fontWeight: 'bold' }}>MRP: ₹ {item.mrp}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>MRP: ₹ </Text>
                   <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>Price: ₹ {item.price}</Text>
                   <TouchableOpacity onPress={() => handleFavoriteItem(item)} style={{ marginLeft: 100 }}>
                    
@@ -568,7 +735,7 @@ const Order = ({ navigation }) => {
               }}
             >
               <View>
-                <Text style={{ fontSize: 16, fontFamily: 'regular' }}>{selectedItem.label}</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'regular' }}>{selectedItem.name}</Text>
 
 
 
@@ -582,22 +749,22 @@ const Order = ({ navigation }) => {
                   }}
                 >
                   {/* Table header */}
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
+                  {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
                     <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 10 }}>
                       <Text style={[styles.text,{fontWeight:'bold'}]}>MRP</Text>
                     </View>
                     <View style={{ flex: 1, padding: 5 }}>
                       <Text style={[styles.text,{fontWeight:'bold'}]}>{selectedItem.mrp}</Text>
                     </View>
-                  </View>
+                  </View> */}
 
                   {/* First row of dynamic content */}
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomColor: 'black' }}>
                     <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 10 }}>
-                      <Text style={[styles.text,{fontWeight:'bold'}]}> >0</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>Price</Text>
                     </View>
                     <View style={{ flex: 1, padding: 5 }}>
-                      <Text style={[styles.text,{fontWeight:'bold'}]}>₹63.37</Text>
+                      <Text style={[styles.text,{fontWeight:'bold'}]}>{selectedItem.price}</Text>
                     </View>
                   </View>
 
@@ -651,9 +818,6 @@ const Order = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
-
-
-
           </View>
 
         </Modal>

@@ -456,7 +456,7 @@ const HomeV1 = () => {
 
 
                     <View style={styles.row}>
-                        <Box text="Order" onPress={() => navigation.navigate("Order")} iconName="cart-check" />
+                        <Box text="Products" onPress={() => navigation.navigate("Order")} iconName="cart-check" />
                         <Box text="Buy again" iconName="cart-arrow-down" />
                     </View>
                     <View style={styles.row}>

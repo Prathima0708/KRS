@@ -61,6 +61,10 @@ const Login = ({ navigation }) => {
         try {
             setIsLoading(true)
 
+            if (!formData.email || !formData.password) {
+                alert('Please fill in all fields');
+                return
+              }
             const response = await fetch(`${login_URL}`, {
                 method: 'POST',
                 headers: {
@@ -81,7 +85,8 @@ const Login = ({ navigation }) => {
                // throw new Error('Signin failed')
                 
             }
-            navigation.navigate('LocationAccess')
+            console.log(response)
+            // navigation.navigate('LocationAccess')
         } catch (error) {
             console.error('Error during signin:', error)
             // Handle error, e.g., display an error message to the user
