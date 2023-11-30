@@ -464,7 +464,7 @@ const HomeV1 = () => {
                         <Box text="Cart" onPress={() => navigation.navigate('Cart')} iconName="cart-plus" />
                     </View>
                     <View style={styles.row}>
-                        <Box text="Favorites" iconName="heart-outline" />
+                        <Box text="Favorites" onPress={() => navigation.navigate('Favourite')} iconName="heart-outline" />
                         <Box text="Ledger" onPress={() => navigation.navigate('Ledger')} iconName="note-check-outline" />
                     </View>
                     <View style={styles.row}>
