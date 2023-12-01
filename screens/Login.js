@@ -186,7 +186,7 @@ const Login = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <Text
+                {/* <Text
                     style={{
                         ...FONTS.body4,
                         color: COLORS.black,
@@ -217,7 +217,7 @@ const Login = ({ navigation }) => {
                             style={commonStyles.socialLogo}
                         />
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </Animatable.View>
         </LinearGradient>
     )
