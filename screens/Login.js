@@ -11,6 +11,7 @@ import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { LinearGradient } from 'expo-linear-gradient'
 import { login_URL } from '../constants/utils/URL'
+import axios from 'axios'
 
 const isTestMode = true
 
@@ -57,43 +58,79 @@ const Login = ({ navigation }) => {
         }
     }, [error])
 
-    const onSubmit = async () => {
-        try {
-            setIsLoading(true)
-
-            if (!formData.email || !formData.password) {
-                alert('Please fill in all fields');
-                return
-              }
-            const response = await fetch(`${login_URL}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                }),
-            })
-
-            if (response.ok) {
-                const responseData = await response.json()
-                console.log('API response:', responseData)
-                // Handle successful signup, e.g., navigate to the login screen
-                navigation.navigate('LocationAccess')
-            } else {
-               // throw new Error('Signin failed')
-                
-            }
-            console.log(response)
-            navigation.navigate('LocationAccess')
-        } catch (error) {
-            console.error('Error during signin:', error)
-            // Handle error, e.g., display an error message to the user
-        } finally {
-            setIsLoading(false)
+    async function onSubmit() {
+        const request_model={
+            email:formData.email,
+            password:formData.password
         }
+        try {
+            console.log("1");
+            setIsLoading(true);
+        
+            let headers = {
+                "Content-Type": "application/json; charset=utf-8",
+            };
+        
+            const res = await axios.post(`${login_URL}`, request_model, {
+                headers: headers,
+            });
+        
+            console.log("2");
+        
+            if (res.data) {
+                console.log("4");
+                console.log('API response:', res.data);
+            } else {
+                console.log("5");
+            }
+        
+        } catch (error) {
+            console.log('error')
+            console.error('Error during signin:', error);
+        
+        } finally {
+            setIsLoading(false);
+        }
+        
     }
+
+    // const onSubmit = async () => {
+    //     try {
+    //         setIsLoading(true)
+
+    //         if (!formData.email || !formData.password) {
+    //             alert('Please fill in all fields');
+    //             return
+    //           }
+    //         const response = await fetch(`${login_URL}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 email: formData.email,
+    //                 password: formData.password,
+    //             }),
+    //         })
+
+    //         if (response.ok) {
+    //             const responseData = await response.json()
+    //             console.log('API response:', responseData)
+    //             // Handle successful signup, e.g., navigate to the login screen
+    //             navigation.navigate('LocationAccess')
+    //         } else {
+    //            // throw new Error('Signin failed')
+                
+    //         }
+    //         console.log(response)
+    //         navigation.navigate('LocationAccess')
+    //     } catch (error) {
+    //         console.error('Error during signin:', error)
+    //         // Handle error, e.g., display an error message to the user
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
 
     // implementing facebook authentication
     const facebookAuthHandler = () => {
