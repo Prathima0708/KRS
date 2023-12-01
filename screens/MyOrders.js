@@ -27,7 +27,7 @@ const MyOrders = ({ navigation }) => {
 
   const [routes] = React.useState([
       { key: 'first', title: 'Ongoing' },
-      { key: 'second', title: 'History' },
+    //  { key: 'second', title: 'History' },
   ])
 
   const renderTabBar = (props) => (
@@ -83,7 +83,7 @@ const MyOrders = ({ navigation }) => {
                       My Orders
                   </Text>
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                   onPress={() => console.log('Pressed')}
                   style={commonStyles.header1Icon}
               >
@@ -96,7 +96,7 @@ const MyOrders = ({ navigation }) => {
                           tintColor: COLORS.black,
                       }}
                   />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
           </View>
       )
   }

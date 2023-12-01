@@ -95,7 +95,7 @@ const History = ({ navigation }) => {
                                             styles.reorderButtonText,
                                         ]}
                                     >
-                                        Re-Order
+                                        Buy again
                                     </Text>
                                 </TouchableOpacity>
                             </View>

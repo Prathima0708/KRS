@@ -46,7 +46,15 @@ const Signup = ({ navigation }) => {
         password: '',
         passwordConfirm:''
     })
+ const [formErrors, setFormErrors] = useState({
+    email: '',
+  });
 
+  const validateEmail = (email) => {
+    // Simple email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
     // const inputChangedHandler = useCallback(
     //     (inputId, inputValue) => {
     //         const result = validateInput(inputId, inputValue)
@@ -60,6 +68,13 @@ const Signup = ({ navigation }) => {
             ...prevFormData,
             [id]: value,
         }))
+        // if (id === 'email') {
+        //     const isValid = validateEmail(value);
+        //     setFormErrors((prevFormErrors) => ({
+        //       ...prevFormErrors,
+        //       [id]: isValid ? '' : 'Invalid email format',
+        //     }));
+        //   }
     }
 
     useEffect(() => {
@@ -204,7 +219,8 @@ const Signup = ({ navigation }) => {
                     <Input
                         id="email"
                         onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['email']}
+                        
+                       // errorText={formState.inputValidities['email']}
                         placeholder="Email"
                         placeholderTextColor={COLORS.black}
                         keyboardType="email-address"
@@ -214,6 +230,7 @@ const Signup = ({ navigation }) => {
                         onInputChanged={inputChangedHandler}
                         errorText={formState.inputValidities['password']}
                         autoCapitalize="none"
+                        
                         id="password"
                         placeholder="*************"
                         placeholderTextColor={COLORS.black}

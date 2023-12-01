@@ -82,7 +82,7 @@ const OngoingOrders = () => {
                                         styles.cancelButtonText,
                                     ]}
                                 >
-                                    Cancel
+                                    Return
                                 </Text>
                             </TouchableOpacity>
                         </View>

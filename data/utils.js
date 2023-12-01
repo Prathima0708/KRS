@@ -123,7 +123,7 @@ export const furnitureCategories = [
     {
       id: 1,
       name: 'Choco chips',
-      type: 'Furniture',
+      type: 'Product type',
       price: 299.99,
       numberOfItems: 1,
       receipt: "#20231001",
@@ -132,7 +132,7 @@ export const furnitureCategories = [
     {
       id: 2,
       name: 'Spices',
-      type: 'Furniture',
+      type: 'Product type',
       price: 499.99,
       numberOfItems: 2,
       receipt: "#20231002",
@@ -141,7 +141,7 @@ export const furnitureCategories = [
     {
       id: 3,
       name: 'Amul products',
-      type: 'Furniture',
+      type: 'Product type',
       price: 199.99,
       numberOfItems: 1,
       receipt: "#20231003",
