@@ -37,6 +37,7 @@ import {
     getAllProducts_URL,
     getBrands_URL,
     getCategories_URL,
+    getFavoritesByUserId_URL,
     getFavorites_URL,
 } from '../../constants/utils/URL'
 import axios from 'axios'
@@ -293,6 +294,28 @@ const Order = ({ navigation }) => {
 
     //     }
     // }
+    useEffect(() => {
+        const getIDs = async () => {
+            const request_body = {
+                userId: userId,
+            };
+    
+            try {
+                const res = await axios.post(`${getFavoritesByUserId_URL}`, request_body);
+    
+                const favoriteProducts = res.data.productIds; // Assuming productIds is an array in the response
+    
+                const matchingProducts = allProducts.filter(product => favoriteProducts.includes(product.id));
+    
+                console.log(matchingProducts);
+            } catch (error) {
+                console.error('Error retrieving user ID:', error);
+            }
+        };
+    
+        getIDs();
+    }, [userId, allProducts]);
+    
 
     const handleFavoriteItem = async (item) => {
         // Assuming you have userId available, replace 'yourUserId' with the actual userId
