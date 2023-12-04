@@ -54,7 +54,7 @@ const Favourite = ({ navigation }) => {
         return (
             <View>
                 <FlatList
-                    data={favorites}
+                    data={products}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => (
                         <FavouriteCard
