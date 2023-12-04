@@ -37,6 +37,7 @@ import {
     getAllProducts_URL,
     getBrands_URL,
     getCategories_URL,
+    getFavorites_URL,
 } from '../../constants/utils/URL'
 import axios from 'axios'
 import { TouchableWithoutFeedback } from 'react-native'
@@ -235,61 +236,122 @@ const Order = ({ navigation }) => {
         }
     }
 
-    async function handleFavoriteItem(item) {
-        setIsCardClicked(!isCardClicked)
-        setCartModalVisible(false)
-        setSelectedCardIndex(item.id)
+    // async function handleFavoriteItem(item) {
+    //     setIsCardClicked(!isCardClicked)
+    //     setCartModalVisible(false)
+    //     setSelectedCardIndex(item.id)
 
-        const object = {
-            item_id: item.id,
-            clicked_status: true,
-        }
+    //     const object = {
+    //         item_id: item.id,
+    //         clicked_status: true,
+    //     }
 
-        const existingItemIndex = favoriteItems.findIndex(
-            (item) => item.item_id === object.item_id
+    //     const existingItemIndex = favoriteItems.findIndex(
+    //         (item) => item.item_id === object.item_id
+    //     )
+
+    //     if (existingItemIndex !== -1) {
+    //         // If the item exists, toggle the clicked_status
+    //         const updatedItems = [...favoriteItems]
+    //         updatedItems[existingItemIndex].clicked_status =
+    //             !updatedItems[existingItemIndex].clicked_status
+    //         setFavoriteItems(updatedItems)
+    //     } else {
+    //         // If the item does not exist, add it with clicked_status as true
+    //         setFavoriteItems((prevArray) => [...prevArray, object])
+    //     }
+
+    //     const itemIdsArray = favoriteItems.map((item) => item.item_id)
+    //     const request_model={
+    //         userId: userId,
+    //         productIds: itemIdsArray,
+    //     }
+    //     console.log(itemIdsArray)
+    //     console.log("REQUEST",request_model)
+    //     try {
+    //         setIsLoading(true)
+
+    //         let headers = {
+    //             'Content-Type': 'application/json; charset=utf-8',
+    //         }
+
+    //         const res = await axios.post(`${favoriteItemPost_URL}`,
+
+    //         {
+    //             headers:headers,
+    //             data:request_model
+    //         }
+    //         )
+
+    //         if (res.data) {
+    //             console.log('API response:', res.data)
+    //         }
+
+    //     } catch (error) {
+    //         console.log('error',error)
+    //     } finally {
+
+    //     }
+    // }
+
+    const handleFavoriteItem = async (item) => {
+        // Assuming you have userId available, replace 'yourUserId' with the actual userId
+
+        // Fetch existing favorite product IDs for the user
+        const existingFavoriteProducts = favoriteItems.map(
+            (favItem) => favItem.item_id
         )
 
-        if (existingItemIndex !== -1) {
-            // If the item exists, toggle the clicked_status
-            const updatedItems = [...favoriteItems]
-            updatedItems[existingItemIndex].clicked_status =
-                !updatedItems[existingItemIndex].clicked_status
-            setFavoriteItems(updatedItems)
-        } else {
-            // If the item does not exist, add it with clicked_status as true
-            setFavoriteItems((prevArray) => [...prevArray, object])
-        }
+        // Toggle favorite status
+        const isFavorite = existingFavoriteProducts.includes(item.id)
 
-        const itemIdsArray = favoriteItems.map((item) => item.item_id)
-        const request_model={
+        // Combine existing and new product IDs
+        const updatedProductIds = isFavorite
+            ? existingFavoriteProducts.filter(
+                  (productId) => productId !== item.id
+              ) // Remove if already in favorites
+            : [...existingFavoriteProducts, item.id] // Add if not in favorites
+
+        // Prepare request body
+        const requestBody = {
             userId: userId,
-            productIds: itemIdsArray,
+            productIds: updatedProductIds,
         }
-        console.log(itemIdsArray)
-        console.log("REQUEST",request_model)
+
+        // Make API request
         try {
-            setIsLoading(true)
-
-            let headers = {
-                'Content-Type': 'application/json; charset=utf-8',
-            }
-
-            const res = await axios.post(`${favoriteItemPost_URL}`, request_model,
-            {
-                headers:headers
-            }
+            const response = await fetch(
+                'http://13.239.122.212:8080/api/favourites',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                }
             )
+            const res = await response.json()
+            console.log('api res', res)
+            if (response.ok) {
+                // Update favoriteItems array based on the response
+                const updatedFavoriteItems = updatedProductIds.map(
+                    (productId) => ({
+                        item_id: productId,
+                        clicked_status: true,
+                    })
+                )
 
-            if (res.data) {
-                console.log('API response:', res.data)
-            } 
-
+                // Update state with the new favoriteItems array
+                setFavoriteItems(updatedFavoriteItems)
+            } else {
+                // Handle error if the response is not okay
+                console.error('Failed to toggle favorite status')
+            }
         } catch (error) {
-            console.log('error',error)
-        } finally {
-
+            console.error('Error while making API request:', error)
         }
     }
+
     // const handleFavoriteItem = (item) => {
     //     setIsCardClicked(!isCardClicked)
     //     setCartModalVisible(false)
@@ -388,15 +450,15 @@ const Order = ({ navigation }) => {
             type: 'info',
         })
         console.log('selectedProductIds', selectedItem.id)
-        const existingProductIds = selectedItem.id;
+        const existingProductIds = selectedItem.id
         const request_model = {
             userId: userId,
             // productIds: selectedProductIds,
-            productIds: [selectedItem.id], 
+            productIds: [selectedItem.id],
         }
 
         console.log(request_model)
-       
+
         try {
             setIsLoading(true)
 
@@ -413,7 +475,6 @@ const Order = ({ navigation }) => {
             } else {
             }
         } catch (error) {
-          
             console.log('Error ', error)
         } finally {
             setIsLoading(false)
@@ -943,7 +1004,7 @@ const Order = ({ navigation }) => {
                                         }
                                     >
                                         <Image
-                                            source={{uri:`${item.image}`}}
+                                            source={{ uri: `${item.image}` }}
                                             style={{
                                                 width: 50,
                                                 height: 50,
@@ -1012,6 +1073,7 @@ const Order = ({ navigation }) => {
                         </>
                     ))}
                 </ScrollView>
+
                 <Modal
                     animationType="slide"
                     transparent={true}
