@@ -6,99 +6,105 @@ import {
     Image,
     FlatList,
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS } from '../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { orderHistory } from '../data/utils'
 import Header from '../components/Header'
+import { getUserOrders_URL } from '../constants/utils/URL'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const History = ({ navigation }) => {
+
+
+    const [historyItems,setHistoryItems]=useState([]);
+
+    const [userId, setUserId] = useState('')
+
+    useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const userid = await AsyncStorage.getItem('userid')
+                if (userid !== null) {
+                    setUserId(userid)
+                } else {
+                    console.log('User ID not found in AsyncStorage')
+                }
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getUserId()
+    }, [])
+
+    useEffect(() => {
+        const request_body={
+            userId:userId
+        }
+        async function getItems() {
+            try {
+                const res = await axios.post(`${getUserOrders_URL}`,request_body)
+
+                const formattedData = res.data.map(order => ({
+                    ...order,
+                    items: order.items.map(item => JSON.stringify(item)),
+                }));
+    
+                setHistoryItems(formattedData);
+                console.log(formattedData);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getItems()
+    }, [userId])
+
     return (
         <SafeAreaView style={styles.area}>
             <View style={styles.container}>
                 <Header title="Orders History" />
                 <FlatList
-                    data={orderHistory}
+                    data={historyItems}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => (
-                        <View style={styles.itemContainer}>
-                            <View style={styles.borderBottom}>
-                                <Text style={styles.typeText}>{item.type}</Text>
-                                <Text
-                                    style={[
+                        <View style={styles.orderContainer}>
+                            <Text style={styles.orderIdText}>Order ID: #{item.id}</Text>
+                            <Text style={styles.orderDateText}>Order Date: {new Date(item.orderDate).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</Text>
+                            <View style={styles.productsContainer}>
+                                {item.items.map((product, productIndex) => {
+                                const productDetails = JSON.parse(product);
+                                return (
+                                    <>
+                                    <View key={productIndex} style={styles.productCard}>
+                                        <Text style={styles.priceText}>Product ID: {productDetails.productId}</Text>
+                                        <Text style={styles.priceText}>Quantity: {productDetails.quantity}</Text>
+                                        <Text style={styles.priceText}>Price: {productDetails.price}</Text>
+                                    </View>
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity style={styles.rateButton} onPress={() =>
+                                                navigation.navigate('AddReviews')
+                                            }>
+                                        <Text style={styles.rateButtonText}>Rate</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.reorderButton} onPress={() => console.log('Buy Again button pressed')}>
+                                        <Text style={styles.reorderButtonText}>Buy Again</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    </>
+                                    
+                                );
+                                })}
+                            </View>
+                            <Text style={[
                                         styles.statusText,
                                         item.status === 'Completed'
                                             ? styles.completedStatus
                                             : styles.pendingStatus,
-                                    ]}
-                                >
-                                    {item.status}
-                                </Text>
-                            </View>
-                            <View style={styles.rowContainer}>
-                                <View style={styles.imageContainer}>
-                                    <Image
-                                        source={item.image}
-                                        style={styles.image}
-                                    />
-                                    <View style={{ marginLeft: 12 }}>
-                                        <Text style={styles.nameText}>
-                                            {item.name}
-                                        </Text>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                marginTop: 4,
-                                            }}
-                                        >
-                                            <Text style={styles.priceText}>
-                                                ${item.price}
-                                            </Text>
-                                            <Text style={styles.dateText}>
-                                                {' '}
-                                                | {item.date}
-                                            </Text>
-                                            <Text
-                                                style={styles.numberOfItemsText}
-                                            >
-                                                {' '}
-                                                | {item.numberOfItems} Items
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <Text style={styles.receiptText}>
-                                    {item.receipt}
-                                </Text>
-                            </View>
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity
-                                    onPress={() =>
-                                        navigation.navigate('AddReviews')
-                                    }
-                                    style={styles.rateButton}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            styles.rateButtonText,
-                                        ]}
-                                    >
-                                        Rate
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.reorderButton}>
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            styles.reorderButtonText,
-                                        ]}
-                                    >
-                                        Buy again
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
+                                    ]}>Order Status: {item.status}</Text>
+                            
                         </View>
                     )}
                 />
@@ -108,6 +114,59 @@ const History = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+
+    orderContainer: {
+        backgroundColor: '#fff',
+        margin: 10,
+        padding: 10,
+        borderRadius: 8,
+        elevation: 3,
+      },
+      orderIdText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      orderDateText: {
+        fontSize: 14,
+        marginBottom: 5,
+      },
+      productsContainer: {
+        marginTop: 10,
+      },
+      productCard: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 8,
+      },
+      productDetailsText: {
+        fontSize: 14,
+        marginBottom: 5,
+      },
+      orderStatusText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 10,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+      },
+      button: {
+        backgroundColor: '#3498db',
+        padding: 10,
+        borderRadius: 5,
+        width: '48%',
+        alignItems: 'center',
+      },
+    //   buttonText: {
+    //     color: '#fff',
+    //     fontWeight: 'bold',
+    //   },
+
+      
     area: {
         flex: 1,
         backgroundColor: COLORS.white,
@@ -166,7 +225,16 @@ const styles = StyleSheet.create({
     },
     priceText: {
         fontSize: 14,
+        fontFamily: 'regular',
+    },
+
+    orderIdText: {
+        fontSize: 14,
         fontFamily: 'bold',
+    },
+    orderDateText: {
+        fontSize: 14,
+        fontFamily: 'regular',
     },
     dateText: {
         fontSize: 12,

@@ -21,35 +21,35 @@ import { Modal } from 'react-native'
 import { TextInput } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { useEffect } from 'react'
-import { userCart_URL } from '../constants/utils/URL'
+import { deleteCartItem_URL, placeOrder_URL, userCart_URL } from '../constants/utils/URL'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 const Cart = ({ navigation }) => {
     const data = [
         {
-            id: 1,
+            id: '656b446909804a6330aa3997',
             image: require('../assets/images/shops/30g-urad-masala-papad.jpg'), // Use `require` for local images
             label: 'Nandini H C Milk 500 Ml',
             label1: 'Frozen products',
-            mrp: 30,
+            // mrp: 30,
             price: 25,
             favorite: false,
         },
         {
-            id: 2,
+            id: '656b454b09804a6330aa3998',
             image: require('../assets/images/shops/amul-dairy-products.jpg'), // Use `require` for local images
             label: '2M Choco strands',
             label1: 'Frozen products',
-            mrp: 25,
+            // mrp: 25,
             price: 20,
             favorite: true,
         },
         {
-            id: 3,
+            id: '656b46b609804a6330aa3999',
             image: require('../assets/images/shops/choco-strand.jpg'), // Use `require` for local images
             label: '2M Dark choco chips ',
             label1: 'Frozen products',
-            mrp: 25,
+            // mrp: 25,
             price: 20,
             favorite: true,
         },
@@ -121,6 +121,83 @@ const Cart = ({ navigation }) => {
         setQuantity(quantity + 1)
     }
 
+    async function deleteCartItem(item) {
+        try {
+            console.log("Deleting item:", item);
+    
+            const request_model = {
+                id: item.id
+            };
+    
+            const res = await axios.delete(`${deleteCartItem_URL}`, { data: request_model });
+    
+            if (res.status === 200) {
+
+                console.log('Item deleted successfully:', res.data);
+            } else {
+                console.log('Unexpected status code:', res.status);
+            }
+        } catch (error) {
+            // Handle errors
+            if (error.response) {
+
+                console.error('Server Error:', error.response.data);
+                console.error('Status Code:', error.response.status);
+            } else if (error.request) {
+                console.error('No response received from server');
+            } else {
+                console.error('Error:', error.message);
+            }
+        }
+    }    
+
+    async function placeOrder() {
+        
+        console.log("Pressed")
+        const selectedItemsDetails = data.map(({ id, quantity, price }) => ({
+            productId:id,
+            quantity,
+            price,
+        }));
+
+        console.log("CART ITEMS",selectedItemsDetails)
+
+        const request_body={
+            userId:userId,
+            orderDate:"2023-12-04T08:45:37.872Z",
+            items: selectedItemsDetails,
+            status: "PENDING",
+            total: 0,
+            deliveryType: "test",
+            addressId: "test"
+        }
+    
+        console.log(request_body)
+        try {
+
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            };
+    
+            const res = await axios.post(
+                `${placeOrder_URL}`,
+                request_body, // Move request_body to the data property
+                {
+                    headers: headers,
+                }
+            );
+    
+            if (res.data) {
+                console.log('API response:', res.data);
+            }
+
+        } catch (error) {
+            console.log('error',error)
+        } finally {
+
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar hidden={true} />
@@ -164,7 +241,7 @@ const Cart = ({ navigation }) => {
                 </View>
 
                 <FlatList
-                    data={userCart}
+                    data={data}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
                         return (
@@ -234,6 +311,7 @@ const Cart = ({ navigation }) => {
                                             borderColor: COLORS.primary,
                                             borderWidth: 1,
                                         }}
+                                        onPress={()=>deleteCartItem(item)}
                                     >
                                         <MaterialCommunityIcons
                                             name="delete"
@@ -316,7 +394,8 @@ const Cart = ({ navigation }) => {
                 <Button
                     filled
                     title="PLACE ORDER"
-                    onPress={() => setCartModalVisible(true)}
+                    // onPress={() => setCartModalVisible(true)}
+                    onPress={placeOrder}
                     style={{ marginVertical: 2 }}
                 />
             </Animatable.View>
