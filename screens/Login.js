@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar'
 import { LinearGradient } from 'expo-linear-gradient'
 import { login_URL } from '../constants/utils/URL'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const isTestMode = true
 
@@ -59,39 +60,47 @@ const Login = ({ navigation }) => {
     }, [error])
 
     async function onSubmit() {
-        const request_model={
-            email:formData.email,
-            password:formData.password
+        const request_model = {
+            email: formData.email,
+            password: formData.password,
         }
+        const jsonString = JSON.stringify(request_model, null, 2) // null and 2 are optional for formatting (indentation of 2 spaces)
+        console.log(jsonString)
         try {
-            console.log("1");
-            setIsLoading(true);
-        
+            setIsLoading(true)
+
             let headers = {
-                "Content-Type": "application/json; charset=utf-8",
-            };
-        
-            const res = await axios.post(`${login_URL}`, request_model, {
-                headers: headers,
-            });
-        
-            console.log("2");
-        
-            if (res.data) {
-                console.log("4");
-                console.log('API response:', res.data);
-            } else {
-                console.log("5");
+                'Content-Type': 'application/json; charset=utf-8',
             }
-        
+
+            // const res = await axios.post(`${login_URL}`, request_model, {
+            //     headers: headers,
+            // }
+            // )
+
+            const res = await axios.post(`${login_URL}`, request_model)
+
+            if (res.data) {
+                console.log('API response:', res.data)
+            } 
+
+            if(res.data.status==="success"){
+                navigation.navigate('LocationAccess')
+            }
+           
+            else {
+            }
+            try {
+                await AsyncStorage.setItem("userid", res.data.userId);
+              } catch (error) {}
         } catch (error) {
             console.log('error')
-            console.error('Error during signin:', error);
-        
+            alert("Please enter correct pin")
+            console.error('Error during signin:', error)
         } finally {
-            setIsLoading(false);
+            //  navigation.navigate('LocationAccess')
+            setIsLoading(false)
         }
-        
     }
 
     // const onSubmit = async () => {
@@ -120,7 +129,7 @@ const Login = ({ navigation }) => {
     //             navigation.navigate('LocationAccess')
     //         } else {
     //            // throw new Error('Signin failed')
-                
+
     //         }
     //         console.log(response)
     //         navigation.navigate('LocationAccess')

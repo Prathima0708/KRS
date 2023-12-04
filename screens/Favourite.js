@@ -7,13 +7,36 @@ import FavouriteCard from '../components/FavouriteCard'
 import { products } from '../data/products'
 import Header from '../components/Header'
 import { getFavorites_URL } from '../constants/utils/URL'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Favourite = ({ navigation }) => {
     /***
      * Render User favourite Shops
      */
     const [favorites,setFavorites]=useState([]); 
+    const[userId,setUserId]=useState('')
+    useEffect(() => {
+        console.log('products screen')
+        const getUserId = async () => {
+            try {
+                // Retrieve the value of "userid" from AsyncStorage
+                const userid = await AsyncStorage.getItem('userid')
 
+                // Check if the value is present
+                if (userid !== null) {
+                    setUserId(userid)
+                    console.log('User ID:', userId)
+                } else {
+                    console.log('User ID not found in AsyncStorage')
+                }
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getUserId()
+    }, [])
       useEffect(() => {
         async function getAllFavorites() {
           try {
@@ -31,7 +54,7 @@ const Favourite = ({ navigation }) => {
         return (
             <View>
                 <FlatList
-                    data={products}
+                    data={favorites}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => (
                         <FavouriteCard

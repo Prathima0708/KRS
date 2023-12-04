@@ -40,10 +40,13 @@ import {
 } from '../../constants/utils/URL'
 import axios from 'axios'
 import { TouchableWithoutFeedback } from 'react-native'
+import { async } from 'validate.js'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Order = ({ navigation }) => {
     const [brandsModalVisible, setBrandsModalVisible] = useState(false)
     const [categoriesModalVisible, setCategoriesModalVisible] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const [cartModalVisible, setCartModalVisible] = useState(false)
     const [selectedBrands, setSelectedBrands] = useState([])
@@ -61,7 +64,10 @@ const Order = ({ navigation }) => {
     const [categories, setCategories] = useState([])
 
     const [allProducts, setAllProducts] = useState([])
-    const [cartItems, setCartItems] = useState(0);
+    const [cartItems, setCartItems] = useState(0)
+
+    const [userId, setUserId] = useState('')
+    const [selectedProductIds, setSelectedProductIds] = useState([])
 
     // const brands = [
     //   // Define your brands data here
@@ -137,6 +143,7 @@ const Order = ({ navigation }) => {
         async function getAllProducts() {
             try {
                 const res = await axios.post(`${getAllProducts_URL}`)
+                console.log('all products', res.data)
 
                 setAllProducts(res.data)
             } catch (e) {
@@ -146,6 +153,30 @@ const Order = ({ navigation }) => {
 
         getAllProducts()
     }, [])
+
+    useEffect(() => {
+        console.log('products screen')
+        const getUserId = async () => {
+            try {
+                // Retrieve the value of "userid" from AsyncStorage
+                const userid = await AsyncStorage.getItem('userid')
+
+                // Check if the value is present
+                if (userid !== null) {
+                    setUserId(userid)
+                    console.log('User ID:', userid)
+                } else {
+                    console.log('User ID not found in AsyncStorage')
+                }
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getUserId()
+    }, [])
+
+    console.log('User ID in products screen:', userId)
 
     useEffect(() => {
         async function getCategories() {
@@ -241,7 +272,7 @@ const Order = ({ navigation }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: '1',
+                userId: userId,
                 productIds: [itemIdsArray],
             }),
         })
@@ -254,18 +285,46 @@ const Order = ({ navigation }) => {
             // throw new Error('Signin failed')
         }
     }
-    const handleOpenCartModal = (item) => {
-        setIsCardClicked(!isCardClicked)
+    // const handleOpenCartModal = (item) => {
+    //     setIsCardClicked(!isCardClicked)
+    //     setCartModalVisible(true)
+    //     setSelectedCardIndex(item.id)
+
+    //     setSelectedItem(item)
+
+    //     console.log(selectedItem)
+    // }
+    const showModal = (productDetails) => {
+        setSelectedItem(productDetails)
         setCartModalVisible(true)
-        setSelectedCardIndex(item.id)
+    }
+    const handleOpenCartModal = async (item) => {
+        try {
+            const response = await fetch(
+                'http://13.239.122.212:8080/api/products/getProductById',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: item.id }),
+                }
+            )
 
-        setSelectedItem(item)
-
-        console.log(selectedItem)
+            if (response.ok) {
+                const productDetails = await response.json()
+                showModal(productDetails)
+            } else {
+                console.error('Failed to fetch product details')
+            }
+        } catch (error) {
+            console.error('Error fetching product details', error)
+        }
     }
 
-    const handleCardModal = async () => {
-      setCartItems((prevItems) => prevItems + 1);
+    const handleCardModal = async (item) => {
+        setSelectedProductIds((prevIds) => [...prevIds, item.id])
+        setCartItems((prevItems) => prevItems + 1)
         setCartModalVisible(false)
         Toast.show({
             position: 'bottom',
@@ -273,7 +332,34 @@ const Order = ({ navigation }) => {
             text1Style: { color: 'white', backgroundColor: 'black' },
             type: 'info',
         })
+        const request_model = {
+            userId: userId,
+            // productIds: selectedProductIds,
+            productIds: selectedItem.id,
+        }
+        console.log('selectedProductIds', selectedProductIds)
+        console.log('selectedProductIds', selectedItem.id)
+        try {
+            setIsLoading(true)
 
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+
+            const res = await axios.post(`${addToCart_URL}`, request_model, {
+                headers: headers,
+            })
+            console.log('cart data', res.data)
+            if (res.data) {
+                console.log('API response:', res.data)
+            } else {
+            }
+        } catch (error) {
+            console.log('error')
+            console.error('Error ', error)
+        } finally {
+            setIsLoading(false)
+        }
         // try {
         //   // setIsLoading(true)
 
@@ -773,92 +859,99 @@ const Order = ({ navigation }) => {
 
                 {/* Cards */}
                 <ScrollView>
-                    {data.map((item, index) => (
-                        <View
-                            style={{
-                                marginTop: 5,
-                                backgroundColor: 'white',
-                                padding: 16,
-                                borderRadius: 10,
-                                marginBottom: 16,
+                    {allProducts.map((item, index) => (
+                        <>
+                            <View
+                                style={{
+                                    marginTop: 5,
+                                    backgroundColor: 'white',
+                                    padding: 16,
+                                    borderRadius: 10,
+                                    marginBottom: 16,
 
-                              //  elevation: isCardClicked ? 5 : 0, // Remove shadow when card is clicked
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
+                                    //  elevation: isCardClicked ? 5 : 0, // Remove shadow when card is clicked
                                 }}
                             >
-                                <TouchableOpacity
-                                    key={index}
-                                    onPress={() => handleOpenCartModal(item)}
-                                >
-                                    <Image
-                                        source={item.image}
-                                        style={{
-                                            width: 50,
-                                            height: 50,
-                                            marginRight: 30,
-                                        }}
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    key={index}
-                                    onPress={() => handleOpenCartModal(item)}
-                                >
-                                    <Text style={{ fontSize: 18 }}>
-                                        {item.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View
-                                style={{
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: 'black',
-                                    marginTop: -10,
-                                    marginLeft: 80,
-                                }}
-                            />
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginTop: 10,
-                                }}
-                            >
-                                <Text style={{ fontWeight: 'bold' }}>
-                                    MRP: ₹{' '}
-                                </Text>
-                                <Text
+                                <View
                                     style={{
-                                        marginLeft: 10,
-                                        fontWeight: 'bold',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
                                     }}
                                 >
-                                    Price: ₹ {item.price}
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => handleFavoriteItem(item)}
-                                    style={{ marginLeft: 100 }}
-                                >
-                                    <MaterialCommunityIcons
-                                        name={
-                                            favoriteItems.find(
-                                                (favItem) =>
-                                                    favItem.item_id === item.id
-                                            )?.clicked_status
-                                                ? 'heart'
-                                                : 'heart-outline'
+                                    <TouchableOpacity
+                                        key={index}
+                                        onPress={() =>
+                                            handleOpenCartModal(item)
                                         }
-                                        size={20}
-                                        color="red"
-                                        // name={favoriteItems.===item.id ? "heart" : "heart-outline"} size={20} color="red"
-                                    />
-                                </TouchableOpacity>
+                                    >
+                                        <Image
+                                            source={item.image}
+                                            style={{
+                                                width: 50,
+                                                height: 50,
+                                                marginRight: 30,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        key={index}
+                                        onPress={() =>
+                                            handleOpenCartModal(item)
+                                        }
+                                    >
+                                        <Text style={{ fontSize: 18 }}>
+                                            {item.name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View
+                                    style={{
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: 'black',
+                                        marginTop: -10,
+                                        marginLeft: 80,
+                                    }}
+                                />
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginTop: 10,
+                                    }}
+                                >
+                                    <Text style={{ fontWeight: 'bold' }}>
+                                        MRP: ₹{' '}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            marginLeft: 10,
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        Price: ₹ {item.price}
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={() => handleFavoriteItem(item)}
+                                        style={{ marginLeft: 100 }}
+                                    >
+                                        <MaterialCommunityIcons
+                                            name={
+                                                favoriteItems.find(
+                                                    (favItem) =>
+                                                        favItem.item_id ===
+                                                        item.id
+                                                )?.clicked_status
+                                                    ? 'heart'
+                                                    : 'heart-outline'
+                                            }
+                                            size={20}
+                                            color="red"
+                                            // name={favoriteItems.===item.id ? "heart" : "heart-outline"} size={20} color="red"
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
+                        </>
                     ))}
                 </ScrollView>
                 <Modal
@@ -905,16 +998,6 @@ const Order = ({ navigation }) => {
                                             padding: 1,
                                         }}
                                     >
-                                        {/* Table header */}
-                                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
-                    <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 10 }}>
-                      <Text style={[styles.text,{fontWeight:'bold'}]}>MRP</Text>
-                    </View>
-                    <View style={{ flex: 1, padding: 5 }}>
-                      <Text style={[styles.text,{fontWeight:'bold'}]}>{selectedItem.mrp}</Text>
-                    </View>
-                  </View> */}
-
                                         {/* First row of dynamic content */}
                                         <View
                                             style={{

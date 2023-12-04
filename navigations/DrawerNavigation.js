@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
 import { COLORS, images } from "../constants";
 import { Address, Notifications, PaymentMethod, MyOrders, HomeV1, HomeV2, Search, HomeV3, Profile, Favourite, Login } from "../screens";
+import Logout from "../screens/Logout";
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = () => {
@@ -179,7 +180,7 @@ const DrawerNavigation = () => {
               <Feather name="help-circle" size={24} color={COLORS.black} />
             )
           }}
-          component={Login}
+          component={Logout}
         />
 
 

@@ -13,6 +13,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modal } from 'react-native'
 import { TextInput } from 'react-native'
 import { StyleSheet } from 'react-native'
+import { useEffect } from 'react'
+import { userCart_URL } from '../constants/utils/URL'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const Cart = ({ navigation }) => {
     const data = [
         {
@@ -48,6 +52,55 @@ const Cart = ({ navigation }) => {
 
     const [quantity, setQuantity] = useState(1)
     const [cartModalVisible, setCartModalVisible] = useState(false);
+    const[userId,setUserId]=useState('')
+
+    const [userCart,setUserCart]=useState([])
+
+    useEffect(() => {
+        console.log('cart screen')
+        const getUserId = async () => {
+            try {
+                // Retrieve the value of "userid" from AsyncStorage
+                const userid = await AsyncStorage.getItem('userid')
+
+                // Check if the value is present
+                if (userid !== null) {
+                    setUserId(userid)
+                    console.log('User ID:', userId)
+                } else {
+                    console.log('User ID not found in AsyncStorage')
+                }
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getUserId()
+    }, [])
+
+    console.log('User ID:', userId)
+
+    useEffect(() => {
+        async function getUserCart() {
+            const request_model={
+                userId:userId
+            }
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+          try {
+            const res = await axios.post(`${userCart_URL}`,request_model,{
+                headers:headers
+            });
+      
+            setUserCart(res.data);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      
+        getUserCart();
+      }, []);
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
