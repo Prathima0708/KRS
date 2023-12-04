@@ -235,7 +235,7 @@ const Order = ({ navigation }) => {
         }
     }
 
-    const handleFavoriteItem = (item) => {
+    async function handleFavoriteItem(item) {
         setIsCardClicked(!isCardClicked)
         setCartModalVisible(false)
         setSelectedCardIndex(item.id)
@@ -260,31 +260,86 @@ const Order = ({ navigation }) => {
             setFavoriteItems((prevArray) => [...prevArray, object])
         }
 
-        console.log(favoriteItems)
-
         const itemIdsArray = favoriteItems.map((item) => item.item_id)
-
+        const request_model={
+            userId: userId,
+            productIds: itemIdsArray,
+        }
         console.log(itemIdsArray)
+        console.log("REQUEST",request_model)
+        try {
+            setIsLoading(true)
 
-        const response = fetch(`${favoriteItemPost_URL}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-                productIds: [itemIdsArray],
-            }),
-        })
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
 
-        if (response.ok) {
-            const responseData = response.json()
-            console.log('API response:', responseData)
-            // Handle successful signup, e.g., navigate to the login screen
-        } else {
-            // throw new Error('Signin failed')
+            const res = await axios.post(`${favoriteItemPost_URL}`, request_model,
+            {
+                headers:headers
+            }
+            )
+
+            if (res.data) {
+                console.log('API response:', res.data)
+            } 
+
+        } catch (error) {
+            console.log('error',error)
+        } finally {
+
         }
     }
+    // const handleFavoriteItem = (item) => {
+    //     setIsCardClicked(!isCardClicked)
+    //     setCartModalVisible(false)
+    //     setSelectedCardIndex(item.id)
+
+    //     const object = {
+    //         item_id: item.id,
+    //         clicked_status: true,
+    //     }
+
+    //     const existingItemIndex = favoriteItems.findIndex(
+    //         (item) => item.item_id === object.item_id
+    //     )
+
+    //     if (existingItemIndex !== -1) {
+    //         // If the item exists, toggle the clicked_status
+    //         const updatedItems = [...favoriteItems]
+    //         updatedItems[existingItemIndex].clicked_status =
+    //             !updatedItems[existingItemIndex].clicked_status
+    //         setFavoriteItems(updatedItems)
+    //     } else {
+    //         // If the item does not exist, add it with clicked_status as true
+    //         setFavoriteItems((prevArray) => [...prevArray, object])
+    //     }
+
+    //     console.log(favoriteItems)
+
+    //     const itemIdsArray = favoriteItems.map((item) => item.item_id)
+
+    //     console.log(itemIdsArray)
+
+    //     const response = fetch(`${favoriteItemPost_URL}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             userId: userId,
+    //             productIds: [itemIdsArray],
+    //         }),
+    //     })
+
+    //     if (response.ok) {
+    //         const responseData = response.json()
+    //         console.log('API response:', responseData)
+    //         // Handle successful signup, e.g., navigate to the login screen
+    //     } else {
+    //         // throw new Error('Signin failed')
+    //     }
+    // }
     // const handleOpenCartModal = (item) => {
     //     setIsCardClicked(!isCardClicked)
     //     setCartModalVisible(true)
