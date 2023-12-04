@@ -38,6 +38,7 @@ import {
     getBrands_URL,
     getCategories_URL,
     getFavorites_URL,
+    userCart_URL,
 } from '../../constants/utils/URL'
 import axios from 'axios'
 import { TouchableWithoutFeedback } from 'react-native'
@@ -69,6 +70,8 @@ const Order = ({ navigation }) => {
 
     const [userId, setUserId] = useState('')
     const [selectedProductIds, setSelectedProductIds] = useState([])
+
+    const [cartCount, setCartCount] = useState(0)
 
     // const brands = [
     //   // Define your brands data here
@@ -154,6 +157,32 @@ const Order = ({ navigation }) => {
 
         getAllProducts()
     }, [])
+
+    useEffect(() => {
+        const request_model = {
+            userId: userId,
+        }
+        let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+        }
+        async function getCartCount() {
+            try {
+                const res = await axios.post(`${userCart_URL}`, request_model, {
+                    headers: headers,
+                })
+
+               
+
+                setCartCount(res.data.length)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getCartCount()
+    }, [userId])
+
+    console.log('cart count', cartCount)
 
     useEffect(() => {
         console.log('products screen')
@@ -457,8 +486,6 @@ const Order = ({ navigation }) => {
             productIds: [selectedItem.id],
         }
 
-        console.log(request_model)
-
         try {
             setIsLoading(true)
 
@@ -469,11 +496,6 @@ const Order = ({ navigation }) => {
             const res = await axios.post(`${addToCart_URL}`, request_model, {
                 headers: headers,
             })
-            console.log('cart data', res.data)
-            if (res.data) {
-                console.log('API response:', res.data)
-            } else {
-            }
         } catch (error) {
             console.log('Error ', error)
         } finally {
@@ -600,7 +622,7 @@ const Order = ({ navigation }) => {
                                         color: COLORS.white,
                                     }}
                                 >
-                                    {cartItems}
+                                    {cartCount}
                                 </Text>
                             </View>
                             <Feather
