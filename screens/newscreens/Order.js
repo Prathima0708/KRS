@@ -387,13 +387,16 @@ const Order = ({ navigation }) => {
             text1Style: { color: 'white', backgroundColor: 'black' },
             type: 'info',
         })
+        console.log('selectedProductIds', selectedItem.id)
+        const existingProductIds = selectedItem.id;
         const request_model = {
             userId: userId,
             // productIds: selectedProductIds,
-            productIds: selectedItem.id,
+            productIds: [selectedItem.id], 
         }
-        console.log('selectedProductIds', selectedProductIds)
-        console.log('selectedProductIds', selectedItem.id)
+
+        console.log(request_model)
+       
         try {
             setIsLoading(true)
 
@@ -410,8 +413,8 @@ const Order = ({ navigation }) => {
             } else {
             }
         } catch (error) {
-            console.log('error')
-            console.error('Error ', error)
+          
+            console.log('Error ', error)
         } finally {
             setIsLoading(false)
         }
@@ -940,7 +943,7 @@ const Order = ({ navigation }) => {
                                         }
                                     >
                                         <Image
-                                            source={item.image}
+                                            source={{uri:`${item.image}`}}
                                             style={{
                                                 width: 50,
                                                 height: 50,

@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, FlatList, TextBase } from 'react-native'
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    FlatList,
+    TextBase,
+} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, SIZES, icons } from '../constants'
 import * as Animatable from 'react-native-animatable'
@@ -9,7 +16,7 @@ import Button from '../components/Button'
 import { cartData } from '../data/cart'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Modal } from 'react-native'
 import { TextInput } from 'react-native'
 import { StyleSheet } from 'react-native'
@@ -45,16 +52,16 @@ const Cart = ({ navigation }) => {
             mrp: 25,
             price: 20,
             favorite: true,
-        }
+        },
 
         // Add more items as needed
-    ];
+    ]
 
     const [quantity, setQuantity] = useState(1)
-    const [cartModalVisible, setCartModalVisible] = useState(false);
-    const[userId,setUserId]=useState('')
+    const [cartModalVisible, setCartModalVisible] = useState(false)
+    const [userId, setUserId] = useState('')
 
-    const [userCart,setUserCart]=useState([])
+    const [userCart, setUserCart] = useState([])
 
     useEffect(() => {
         console.log('cart screen')
@@ -82,25 +89,27 @@ const Cart = ({ navigation }) => {
 
     useEffect(() => {
         async function getUserCart() {
-            const request_model={
-                userId:userId
+            const request_model = {
+                userId: userId,
             }
             let headers = {
                 'Content-Type': 'application/json; charset=utf-8',
             }
-          try {
-            const res = await axios.post(`${userCart_URL}`,request_model,{
-                headers:headers
-            });
-      
-            setUserCart(res.data);
-          } catch (e) {
-            console.log(e);
-          }
+            try {
+                const res = await axios.post(`${userCart_URL}`, request_model, {
+                    headers: headers,
+                })
+
+                console.log('user cart',res.data)
+
+                setUserCart(res.data)
+            } catch (e) {
+                console.log(e)
+            }
         }
-      
-        getUserCart();
-      }, []);
+
+        getUserCart()
+    }, [])
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -113,9 +122,7 @@ const Cart = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView
-            style={{ flex: 1, }}
-        >
+        <SafeAreaView style={{ flex: 1 }}>
             <StatusBar hidden={true} />
             <View style={cartStyles.header}>
                 <View
@@ -154,11 +161,10 @@ const Cart = ({ navigation }) => {
                             Cart
                         </Text>
                     </View>
-
                 </View>
 
                 <FlatList
-                    data={data}
+                    data={userCart}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
                         return (
@@ -178,23 +184,62 @@ const Cart = ({ navigation }) => {
 
                                 </View> */}
 
-
-                                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
-                                    <Image source={item.image} style={{ width: 50, height: 50, marginRight: 10 }} />
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginTop: 10,
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Image
+                                        source={item.image}
+                                        style={{
+                                            width: 50,
+                                            height: 50,
+                                            marginRight: 10,
+                                        }}
+                                    />
                                     <View style={{ flexDirection: 'column' }}>
-                                        <Text style={styles.text}>{item.label}</Text>
-                                        <Text style={[styles.text, { fontWeight: 'bold' }]}>{item.label1}</Text>
+                                        <Text style={styles.text}>
+                                            {item.label}
+                                        </Text>
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                { fontWeight: 'bold' },
+                                            ]}
+                                        >
+                                            {item.label1}
+                                        </Text>
                                     </View>
                                 </View>
 
-
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginTop: 10,
+                                    }}
+                                >
                                     <Text style={styles.text}>Qty: 1</Text>
-                                    <Text style={[{ marginLeft: 10, ...styles.text }]}>Total: ₹ {item.price}</Text>
-                                    <TouchableOpacity style={{ marginLeft: 150, borderColor: COLORS.primary, borderWidth: 1 }}>
-
-                                        <MaterialCommunityIcons name="delete" size={24} color={COLORS.primary} />
-
+                                    <Text
+                                        style={[
+                                            { marginLeft: 10, ...styles.text },
+                                        ]}
+                                    >
+                                        Total: ₹ {item.price}
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={{
+                                            marginLeft: 150,
+                                            borderColor: COLORS.primary,
+                                            borderWidth: 1,
+                                        }}
+                                    >
+                                        <MaterialCommunityIcons
+                                            name="delete"
+                                            size={24}
+                                            color={COLORS.primary}
+                                        />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -299,12 +344,18 @@ const Cart = ({ navigation }) => {
                         }}
                     >
                         <View>
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={styles.text} >Thanks</Text>
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Text style={styles.text}>Thanks</Text>
 
-                                <Text style={styles.text}>Your oder placed suucessfully</Text>
+                                <Text style={styles.text}>
+                                    Your oder placed suucessfully
+                                </Text>
                             </View>
-
 
                             <View
                                 style={{
@@ -316,9 +367,26 @@ const Cart = ({ navigation }) => {
                                 }}
                             >
                                 {/* Table header */}
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
-                                    <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 3 }}>
-                                        <Text style={styles.text}>Goods Cost</Text>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: 'black',
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            borderRightWidth: 1,
+                                            borderRightColor: 'black',
+                                            padding: 3,
+                                        }}
+                                    >
+                                        <Text style={styles.text}>
+                                            Goods Cost
+                                        </Text>
                                     </View>
                                     <View style={{ flex: 1, padding: 5 }}>
                                         <Text style={styles.text}>₹2371</Text>
@@ -326,16 +394,47 @@ const Cart = ({ navigation }) => {
                                 </View>
 
                                 {/* First row of dynamic content */}
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomColor: 'black', borderBottomWidth: 1 }}>
-                                    <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 3 }}>
-                                        <Text style={styles.text}>Delivery Charges</Text>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        borderBottomColor: 'black',
+                                        borderBottomWidth: 1,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            borderRightWidth: 1,
+                                            borderRightColor: 'black',
+                                            padding: 3,
+                                        }}
+                                    >
+                                        <Text style={styles.text}>
+                                            Delivery Charges
+                                        </Text>
                                     </View>
                                     <View style={{ flex: 1, padding: 5 }}>
                                         <Text style={styles.text}>₹07</Text>
                                     </View>
                                 </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomColor: 'black' }}>
-                                    <View style={{ flex: 1, borderRightWidth: 1, borderRightColor: 'black', padding: 3 }}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        borderBottomColor: 'black',
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            borderRightWidth: 1,
+                                            borderRightColor: 'black',
+                                            padding: 3,
+                                        }}
+                                    >
                                         <Text style={styles.text}>Total</Text>
                                     </View>
                                     <View style={{ flex: 1, padding: 5 }}>
@@ -343,12 +442,8 @@ const Cart = ({ navigation }) => {
                                     </View>
                                 </View>
 
-
                                 {/* Add more rows as needed */}
                             </View>
-
-
-
 
                             <View
                                 style={{
@@ -358,16 +453,18 @@ const Cart = ({ navigation }) => {
                                     padding: 10,
                                 }}
                             >
-                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                <View
+                                    style={{
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
                                     <Text style={styles.text}>Delivery:</Text>
                                 </View>
 
-
-                                <Text style={styles.text}>In the next delivery schedule</Text>
-
-
-
-
+                                <Text style={styles.text}>
+                                    In the next delivery schedule
+                                </Text>
                             </View>
                             <TextInput
                                 style={{
@@ -376,16 +473,21 @@ const Cart = ({ navigation }) => {
                                     borderWidth: 1,
                                     backgroundColor: COLORS.primary,
                                     padding: 5,
-
-
                                 }}
                                 placeholder="Type here for enquiry"
                                 multiline={true} // Enable multi-line input
                             />
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('PaymentMethod')}
+                                    onPress={() =>
+                                        navigation.navigate('PaymentMethod')
+                                    }
                                     style={{
                                         width: '40%',
                                         backgroundColor: COLORS.primary,
@@ -394,15 +496,21 @@ const Cart = ({ navigation }) => {
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        margin: 10
+                                        margin: 10,
                                     }}
                                 >
-                                    <Text style={{ color: 'black', marginRight: 5, fontWeight: 'bold' }}>PAY NOW</Text>
-
+                                    <Text
+                                        style={{
+                                            color: 'black',
+                                            marginRight: 5,
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        PAY NOW
+                                    </Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-
                                     style={{
                                         width: '40%',
                                         backgroundColor: '#E7901B',
@@ -411,21 +519,24 @@ const Cart = ({ navigation }) => {
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        margin: 10
+                                        margin: 10,
                                     }}
                                     onPress={() => setCartModalVisible(false)}
                                 >
-                                    <Text style={{ color: 'black', marginRight: 5, fontWeight: 'bold' }}>PAY LATER</Text>
-
+                                    <Text
+                                        style={{
+                                            color: 'black',
+                                            marginRight: 5,
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        PAY LATER
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-
-
-
                 </View>
-
             </Modal>
         </SafeAreaView>
     )
@@ -434,7 +545,7 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'regular',
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     container: {
         flex: 1,
@@ -442,9 +553,6 @@ const styles = StyleSheet.create({
     },
 })
 export default Cart
-
-
-
 
 // import React from 'react'
 // import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
@@ -511,9 +619,6 @@ export default Cart
 //                     </View>
 //                 </TouchableOpacity>
 //             ))}
-
-
-
 
 //         </ScrollView>
 //     )
