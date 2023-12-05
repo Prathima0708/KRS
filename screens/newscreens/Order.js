@@ -39,6 +39,7 @@ import {
     getCategories_URL,
     getFavoritesByUserId_URL,
     getFavorites_URL,
+    userCart_URL,
 } from '../../constants/utils/URL'
 import axios from 'axios'
 import { TouchableWithoutFeedback } from 'react-native'
@@ -71,6 +72,8 @@ const Order = ({ navigation }) => {
     const [userId, setUserId] = useState('')
     const [selectedProductIds, setSelectedProductIds] = useState([])
     const [matchingProductIds, setmatchingProductIds] = useState()
+
+    const [cartCount, setCartCount] = useState(0)
 
     // const brands = [
     //   // Define your brands data here
@@ -143,22 +146,7 @@ const Order = ({ navigation }) => {
     ]
 
     useEffect(() => {
-        async function getAllProducts() {
-            try {
-                const res = await axios.post(`${getAllProducts_URL}`)
-                console.log('all products', res.data)
-
-                setAllProducts(res.data)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        getAllProducts()
-    }, [])
-
-    useEffect(() => {
-        console.log('products screen')
+      
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -178,6 +166,49 @@ const Order = ({ navigation }) => {
 
         getUserId()
     }, [])
+
+    useEffect(() => {
+        async function getAllProducts() {
+            try {
+                const res = await axios.post(`${getAllProducts_URL}`)
+                console.log('all products', res.data)
+
+                setAllProducts(res.data)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getAllProducts()
+    }, [])
+
+    useEffect(() => {
+        const request_model = {
+            userId: userId,
+        }
+        let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+        }
+        async function getCartCount() {
+            try {
+                const res = await axios.post(`${userCart_URL}`, request_model, {
+                    headers: headers,
+                })
+
+               
+
+                setCartCount(res.data.length)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getCartCount()
+    }, [userId])
+
+    console.log('cart count', cartCount)
+
+   
 
     console.log('User ID in products screen:', userId)
 
@@ -332,7 +363,10 @@ const Order = ({ navigation }) => {
             (favItem) => favItem.item_id
         )
 
-        const isFavorite = existingFavoriteProducts.includes(item.id)
+        // Toggle favorite status
+        const isFavorite = existingFavoriteProducts?.includes(item.id)
+
+        // Combine existing and new product IDs
         const updatedProductIds = isFavorite
             ? existingFavoriteProducts.filter(
                   (productId) => productId !== item.id
@@ -484,8 +518,6 @@ const Order = ({ navigation }) => {
             productIds: [selectedItem.id],
         }
 
-        console.log(request_model)
-
         try {
             setIsLoading(true)
 
@@ -496,11 +528,20 @@ const Order = ({ navigation }) => {
             const res = await axios.post(`${addToCart_URL}`, request_model, {
                 headers: headers,
             })
-            console.log('cart data', res.data)
-            if (res.data) {
-                console.log('API response:', res.data)
-            } else {
+            async function getCartCount() {
+                try {
+                    const res = await axios.post(`${userCart_URL}`, request_model, {
+                        headers: headers,
+                    })
+    
+                   
+    
+                    setCartCount(res.data.length)
+                } catch (e) {
+                    console.log(e)
+                }
             }
+            getCartCount()
         } catch (error) {
             console.log('Error ', error)
         } finally {
@@ -548,6 +589,7 @@ const Order = ({ navigation }) => {
         //       // setIsLoading(false)
         //   }
     }
+    
     // function handleCardModal() {
 
     //   // alert("Added to cart")
@@ -627,7 +669,7 @@ const Order = ({ navigation }) => {
                                         color: COLORS.white,
                                     }}
                                 >
-                                    {cartItems}
+                                    {cartCount}
                                 </Text>
                             </View>
                             <Feather

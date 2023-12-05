@@ -361,48 +361,7 @@ const HomeV1 = () => {
                         </View>
                     </View>
 
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Cart')}
-                        style={{
-                            height: 45,
-                            width: 45,
-                            borderRadius: 22.5,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: COLORS.tertiaryBlack,
-                        }}
-                    >
-                        <View>
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    top: -16,
-                                    left: 12,
-                                    backgroundColor: COLORS.primary,
-                                    height: 25,
-                                    width: 25,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: 12.5,
-                                    zIndex: 999,
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 16,
-                                        color: COLORS.white,
-                                    }}
-                                >
-                                    2
-                                </Text>
-                            </View>
-                            <Feather
-                                name="shopping-bag"
-                                size={24}
-                                color={COLORS.white}
-                            />
-                        </View>
-                    </TouchableOpacity>
+                 
                 </View>
 
                 <View style={styles.container}>

@@ -21,9 +21,14 @@ import { Modal } from 'react-native'
 import { TextInput } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { useEffect } from 'react'
-import { deleteCartItem_URL, placeOrder_URL, userCart_URL } from '../constants/utils/URL'
+import {
+    deleteCartItem_URL,
+    placeOrder_URL,
+    userCart_URL,
+} from '../constants/utils/URL'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Alert } from 'react-native'
 const Cart = ({ navigation }) => {
     const data = [
         {
@@ -64,7 +69,7 @@ const Cart = ({ navigation }) => {
     const [userCart, setUserCart] = useState([])
 
     useEffect(() => {
-        console.log('cart screen')
+       
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -100,7 +105,7 @@ const Cart = ({ navigation }) => {
                     headers: headers,
                 })
 
-                console.log('user cart',res.data)
+                console.log('user cart', res.data)
 
                 setUserCart(res.data)
             } catch (e) {
@@ -109,7 +114,7 @@ const Cart = ({ navigation }) => {
         }
 
         getUserCart()
-    }, [])
+    }, [userId])
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -121,82 +126,184 @@ const Cart = ({ navigation }) => {
         setQuantity(quantity + 1)
     }
 
-    async function deleteCartItem(item) {
-        try {
-            console.log("Deleting item:", item);
-    
-            const request_model = {
-                id: item.id
-            };
-    
-            const res = await axios.delete(`${deleteCartItem_URL}`, { data: request_model });
-    
-            if (res.status === 200) {
+    // async function deleteCartItem(id) {
+    //     try {
+    //         console.log('Deleting item:', id)
+    //         let headers = {
+    //             'Content-Type': 'application/json; charset=utf-8',
+    //         }
 
-                console.log('Item deleted successfully:', res.data);
-            } else {
-                console.log('Unexpected status code:', res.status);
-            }
-        } catch (error) {
-            // Handle errors
-            if (error.response) {
+    //         const request_model = {
+    //             id: id,
+    //         }
 
-                console.error('Server Error:', error.response.data);
-                console.error('Status Code:', error.response.status);
-            } else if (error.request) {
-                console.error('No response received from server');
-            } else {
-                console.error('Error:', error.message);
-            }
-        }
-    }    
+    //         const res = await axios.post(
+    //             `${deleteCartItem_URL}`,
+    //             request_model,
+    //             {
+    //                 headers: headers,
+    //             }
+    //         )
+            
+    //         // async function getUserCart() {
+    //         //     const request_model = {
+    //         //         userId: userId,
+    //         //     }
+    //         //     let headers = {
+    //         //         'Content-Type': 'application/json; charset=utf-8',
+    //         //     }
+    //         //     try {
+    //         //         const res = await axios.post(
+    //         //             `${userCart_URL}`,
+    //         //             request_model,
+    //         //             {
+    //         //                 headers: headers,
+    //         //             }
+    //         //         )
+
+    //         //         console.log('user cart', res.data)
+
+    //         //         setUserCart(res.data)
+    //         //     } catch (e) {
+    //         //         console.log(e)
+    //         //     }
+    //         // }
+
+    //         if (res.status === 200) {
+    //             Alert.alert('Success', 'deleted', [
+    //                 { text: 'OK', onPress: () => getUserCart() },
+    //             ])
+    //             console.log('Item deleted successfully:', res.data)
+    //         } else {
+    //             console.log('Unexpected status code:', res.status)
+    //         }
+    //     } catch (error) {
+    //         // Handle errors
+    //         if (error.response) {
+    //             console.error('Server Error:', error.response.data)
+    //             console.error('Status Code:', error.response.status)
+    //         } else if (error.request) {
+    //             console.error('No response received from server')
+    //         } else {
+    //             console.error('Error:', error.message)
+    //         }
+    //     }
+    // }
 
     async function placeOrder() {
-        
-        console.log("Pressed")
+        console.log('Pressed')
         const selectedItemsDetails = data.map(({ id, quantity, price }) => ({
-            productId:id,
+            productId: id,
             quantity,
             price,
-        }));
+        }))
 
-        console.log("CART ITEMS",selectedItemsDetails)
+        console.log('CART ITEMS', selectedItemsDetails)
 
-        const request_body={
-            userId:userId,
-            orderDate:"2023-12-04T08:45:37.872Z",
+        const request_body = {
+            userId: userId,
+            orderDate: '2023-12-04T08:45:37.872Z',
             items: selectedItemsDetails,
-            status: "PENDING",
+            status: 'PENDING',
             total: 0,
-            deliveryType: "test",
-            addressId: "test"
+            deliveryType: 'test',
+            addressId: 'test',
         }
-    
+
         console.log(request_body)
         try {
-
             let headers = {
                 'Content-Type': 'application/json; charset=utf-8',
-            };
-    
+            }
+
             const res = await axios.post(
                 `${placeOrder_URL}`,
                 request_body, // Move request_body to the data property
                 {
                     headers: headers,
                 }
-            );
-    
+            )
+
+            setCartModalVisible(true)
+
             if (res.data) {
-                console.log('API response:', res.data);
+                console.log('API response:', res.data)
             }
-
         } catch (error) {
-            console.log('error',error)
+            console.log('error', error)
         } finally {
-
         }
     }
+
+    async function getUserCart() {
+        const request_model = {
+          userId: userId, // Make sure userId is accessible
+        };
+        let headers = {
+          'Content-Type': 'application/json; charset=utf-8',
+        };
+        try {
+          const res = await axios.post(
+            `${userCart_URL}`,
+            request_model,
+            {
+              headers: headers,
+            }
+          );
+      
+          console.log('user cart', res.data);
+      
+          // Update the userCart state with the latest data
+          setUserCart(res.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+    async function deleteCartItem(id) {
+        try {
+          console.log('Deleting item:', id);
+          let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+          };
+      
+          const request_model = {
+            id: id,
+          };
+      
+          const res = await axios.post(
+            `${deleteCartItem_URL}`,
+            request_model,
+            {
+              headers: headers,
+            }
+          );
+      
+          if (res.status === 200) {
+            // Fetch the latest user cart data after deletion
+            await getUserCart();
+      
+            Alert.alert('Success', 'Deleted');
+            console.log('Item deleted successfully:', res.data);
+          } else {
+            console.log('Unexpected status code:', res.status);
+          }
+        } catch (error) {
+          // Handle errors
+          if (error.response) {
+            console.error('Server Error:', error.response.data);
+            console.error('Status Code:', error.response.status);
+          } else if (error.request) {
+            console.error('No response received from server');
+          } else {
+            console.error('Error:', error.message);
+          }
+        }
+      }
+      
+      // Assuming this function is defined in your component
+    
+      
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -241,7 +348,7 @@ const Cart = ({ navigation }) => {
                 </View>
 
                 <FlatList
-                    data={data}
+                    data={userCart}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
                         return (
@@ -311,7 +418,7 @@ const Cart = ({ navigation }) => {
                                             borderColor: COLORS.primary,
                                             borderWidth: 1,
                                         }}
-                                        onPress={()=>deleteCartItem(item)}
+                                        onPress={() => deleteCartItem(item.id)}
                                     >
                                         <MaterialCommunityIcons
                                             name="delete"
@@ -385,12 +492,12 @@ const Cart = ({ navigation }) => {
                         </View>
                     </View> */}
                 </View>
-                <Button
+                {/* <Button
                     filled
                     title="Clear Cart"
                     // onPress={() => navigation.navigate('PaymentMethod')}
                     style={{ marginVertical: 2, backgroundColor: 'red' }}
-                />
+                /> */}
                 <Button
                     filled
                     title="PLACE ORDER"
