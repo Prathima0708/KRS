@@ -70,6 +70,7 @@ const Order = ({ navigation }) => {
 
     const [userId, setUserId] = useState('')
     const [selectedProductIds, setSelectedProductIds] = useState([])
+    const [matchingProductIds, setmatchingProductIds] = useState()
 
     // const brands = [
     //   // Define your brands data here
@@ -302,12 +303,20 @@ const Order = ({ navigation }) => {
     
             try {
                 const res = await axios.post(`${getFavoritesByUserId_URL}`, request_body);
+                const favoriteProducts = res.data; 
+                const allProductIds = res.data.reduce((acc, item) => {
+                    acc.push(...item.productIds);
+                    return acc;
+                }, []);
     
-                const favoriteProducts = res.data.productIds; // Assuming productIds is an array in the response
+                const uniqueProductIds = [...new Set(allProductIds)];
     
-                const matchingProducts = allProducts.filter(product => favoriteProducts.includes(product.id));
-    
-                console.log(matchingProducts);
+                const matchingProductIds = allProducts
+                    .filter(product => uniqueProductIds.includes(product.id))
+                    .map(product => product.id);
+
+                setmatchingProductIds(matchingProductIds);
+
             } catch (error) {
                 console.error('Error retrieving user ID:', error);
             }
@@ -318,30 +327,23 @@ const Order = ({ navigation }) => {
     
 
     const handleFavoriteItem = async (item) => {
-        // Assuming you have userId available, replace 'yourUserId' with the actual userId
 
-        // Fetch existing favorite product IDs for the user
         const existingFavoriteProducts = favoriteItems.map(
             (favItem) => favItem.item_id
         )
 
-        // Toggle favorite status
         const isFavorite = existingFavoriteProducts.includes(item.id)
-
-        // Combine existing and new product IDs
         const updatedProductIds = isFavorite
             ? existingFavoriteProducts.filter(
                   (productId) => productId !== item.id
-              ) // Remove if already in favorites
-            : [...existingFavoriteProducts, item.id] // Add if not in favorites
+              )
+            : [...existingFavoriteProducts, item.id]
 
-        // Prepare request body
         const requestBody = {
             userId: userId,
             productIds: updatedProductIds,
         }
 
-        // Make API request
         try {
             const response = await fetch(
                 'http://13.239.122.212:8080/api/favourites',
@@ -354,7 +356,9 @@ const Order = ({ navigation }) => {
                 }
             )
             const res = await response.json()
-            console.log('api res', res)
+
+            console.log("API RES",(res))
+
             if (response.ok) {
                 // Update favoriteItems array based on the response
                 const updatedFavoriteItems = updatedProductIds.map(
@@ -1083,6 +1087,9 @@ const Order = ({ navigation }) => {
                                                         favItem.item_id ===
                                                         item.id
                                                 )?.clicked_status
+                                                    ? 'heart'
+                                                    : 'heart-outline' ||
+                                                matchingProductIds?.includes(item.id)
                                                     ? 'heart'
                                                     : 'heart-outline'
                                             }
