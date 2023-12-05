@@ -23,12 +23,14 @@ import { StyleSheet } from 'react-native'
 import { useEffect } from 'react'
 import {
     deleteCartItem_URL,
+    fetchProductDetails,
     placeOrder_URL,
     userCart_URL,
 } from '../constants/utils/URL'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 const Cart = ({ navigation }) => {
     const data = [
         {
@@ -66,10 +68,12 @@ const Cart = ({ navigation }) => {
     const [cartModalVisible, setCartModalVisible] = useState(false)
     const [userId, setUserId] = useState('')
 
+    const [fetchProductIds, setFetchProductIds] = useState([])
+    const [productInfo,setProductInfo]=useState([])
+
     const [userCart, setUserCart] = useState([])
 
     useEffect(() => {
-       
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -108,6 +112,11 @@ const Cart = ({ navigation }) => {
                 console.log('user cart', res.data)
 
                 setUserCart(res.data)
+                const productIds = res.data.reduce((acc, cartItem) => {
+                    acc.push(...cartItem.productIds)
+                    return acc
+                }, [])
+                setFetchProductIds(productIds)
             } catch (e) {
                 console.log(e)
             }
@@ -115,6 +124,33 @@ const Cart = ({ navigation }) => {
 
         getUserCart()
     }, [userId])
+
+    console.log('product id',fetchProductIds)
+    useEffect(() => {
+        async function getProductDetails() {
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+            try {
+                const res = await axios.post(
+                    `${fetchProductDetails}`,
+                    fetchProductIds,
+                    {
+                        headers: headers,
+                    }
+                )
+              
+                console.log('each product details',res.data[0]?.brand)
+                setProductInfo(res.data[0]?.brand)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getProductDetails()
+    }, [userId,fetchProductIds])
+
+    
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -144,7 +180,7 @@ const Cart = ({ navigation }) => {
     //                 headers: headers,
     //             }
     //         )
-            
+
     //         // async function getUserCart() {
     //         //     const request_model = {
     //         //         userId: userId,
@@ -235,75 +271,73 @@ const Cart = ({ navigation }) => {
         }
     }
 
+    const closeModal = () => {
+        setCartModalVisible(false)
+    }
+
     async function getUserCart() {
         const request_model = {
-          userId: userId, // Make sure userId is accessible
-        };
-        let headers = {
-          'Content-Type': 'application/json; charset=utf-8',
-        };
-        try {
-          const res = await axios.post(
-            `${userCart_URL}`,
-            request_model,
-            {
-              headers: headers,
-            }
-          );
-      
-          console.log('user cart', res.data);
-      
-          // Update the userCart state with the latest data
-          setUserCart(res.data);
-        } catch (e) {
-          console.log(e);
+            userId: userId, // Make sure userId is accessible
         }
-      }
+        let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+        }
+        try {
+            const res = await axios.post(`${userCart_URL}`, request_model, {
+                headers: headers,
+            })
+
+            console.log('user cart', res.data)
+
+            // Update the userCart state with the latest data
+            setUserCart(res.data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     async function deleteCartItem(id) {
         try {
-          console.log('Deleting item:', id);
-          let headers = {
-            'Content-Type': 'application/json; charset=utf-8',
-          };
-      
-          const request_model = {
-            id: id,
-          };
-      
-          const res = await axios.post(
-            `${deleteCartItem_URL}`,
-            request_model,
-            {
-              headers: headers,
+            console.log('Deleting item:', id)
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
             }
-          );
-      
-          if (res.status === 200) {
-            // Fetch the latest user cart data after deletion
-            await getUserCart();
-      
-            Alert.alert('Success', 'Deleted');
-            console.log('Item deleted successfully:', res.data);
-          } else {
-            console.log('Unexpected status code:', res.status);
-          }
+
+            const request_model = {
+                id: id,
+            }
+
+            const res = await axios.post(
+                `${deleteCartItem_URL}`,
+                request_model,
+                {
+                    headers: headers,
+                }
+            )
+
+            if (res.status === 200) {
+                // Fetch the latest user cart data after deletion
+                await getUserCart()
+
+                Alert.alert('Success', 'Deleted')
+                console.log('Item deleted successfully:', res.data)
+            } else {
+                console.log('Unexpected status code:', res.status)
+            }
         } catch (error) {
-          // Handle errors
-          if (error.response) {
-            console.error('Server Error:', error.response.data);
-            console.error('Status Code:', error.response.status);
-          } else if (error.request) {
-            console.error('No response received from server');
-          } else {
-            console.error('Error:', error.message);
-          }
+            // Handle errors
+            if (error.response) {
+                console.error('Server Error:', error.response.data)
+                console.error('Status Code:', error.response.status)
+            } else if (error.request) {
+                console.error('No response received from server')
+            } else {
+                console.error('Error:', error.message)
+            }
         }
-      }
-      
-      // Assuming this function is defined in your component
-    
-      
+    }
+
+    // Assuming this function is defined in your component
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -385,7 +419,7 @@ const Cart = ({ navigation }) => {
                                     />
                                     <View style={{ flexDirection: 'column' }}>
                                         <Text style={styles.text}>
-                                            {item.label}
+                                            {item.label}{productInfo?.name}
                                         </Text>
                                         <Text
                                             style={[
@@ -393,7 +427,7 @@ const Cart = ({ navigation }) => {
                                                 { fontWeight: 'bold' },
                                             ]}
                                         >
-                                            {item.label1}
+                                            {item.label1}{productInfo?.description}
                                         </Text>
                                     </View>
                                 </View>
@@ -404,7 +438,7 @@ const Cart = ({ navigation }) => {
                                         marginTop: 10,
                                     }}
                                 >
-                                    <Text style={styles.text}>Qty: 1</Text>
+                                    <Text style={styles.text}>Qty: </Text>
                                     <Text
                                         style={[
                                             { marginLeft: 10, ...styles.text },
@@ -473,7 +507,7 @@ const Cart = ({ navigation }) => {
                                 marginLeft: 12,
                             }}
                         >
-                            $90
+                            Total
                         </Text>
                     </View>
                     {/* <View
@@ -511,7 +545,8 @@ const Cart = ({ navigation }) => {
                 transparent={true}
                 visible={cartModalVisible}
             >
-                <View
+                 <TouchableWithoutFeedback onPress={closeModal}>
+                 <View
                     style={{
                         flex: 1,
                         justifyContent: 'center',
@@ -723,6 +758,8 @@ const Cart = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
+                 </TouchableWithoutFeedback>
+               
             </Modal>
         </SafeAreaView>
     )

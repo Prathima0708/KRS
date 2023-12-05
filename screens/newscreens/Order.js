@@ -74,6 +74,15 @@ const Order = ({ navigation }) => {
 
     const [cartCount, setCartCount] = useState(0)
 
+    const [quantity, setQuantity] = useState('1');
+
+    const handleQuantityChange = (newQuantity) => {
+      // Validate the input to ensure it's a positive integer
+      if (/^[1-9]\d*$/.test(newQuantity)) {
+        setQuantity(newQuantity);
+      }
+    };
+
     // const brands = [
     //   // Define your brands data here
     //   'Dairy Products',
@@ -205,7 +214,6 @@ const Order = ({ navigation }) => {
         getCartCount()
     }, [userId])
 
-    console.log('cart count', cartCount)
 
    
 
@@ -494,6 +502,7 @@ const Order = ({ navigation }) => {
     }
 
     const handleCardModal = async (item) => {
+        const total = selectedItem.price * parseInt(quantity, 10);
         setSelectedProductIds((prevIds) => [...prevIds, item.id])
         setCartItems((prevItems) => prevItems + 1)
         setCartModalVisible(false)
@@ -1137,166 +1146,167 @@ const Order = ({ navigation }) => {
                 </ScrollView>
 
                 <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={cartModalVisible}
-                    onRequestClose={closeModal}
+      animationType="slide"
+      transparent={true}
+      visible={cartModalVisible}
+      onRequestClose={closeModal}
+    >
+      <TouchableWithoutFeedback onPress={closeModal}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: 'white',
+              padding: 16,
+              borderRadius: 10,
+              width: 300,
+              borderWidth: 1,
+              borderColor: 'black',
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'regular',
+                }}
+              >
+                {selectedItem.name}
+              </Text>
+
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'black',
+                  borderRadius: 5,
+                  marginTop: 10,
+                  padding: 1,
+                }}
+              >
+                {/* First row of dynamic content */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderBottomColor: 'black',
+                  }}
                 >
-                    <TouchableWithoutFeedback onPress={closeModal}>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            }}
-                        >
-                            <View
-                                style={{
-                                    backgroundColor: 'white',
-                                    padding: 16,
-                                    borderRadius: 10,
-                                    width: 300,
-                                    borderWidth: 1,
-                                    borderColor: 'black',
-                                }}
-                            >
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            fontFamily: 'regular',
-                                        }}
-                                    >
-                                        {selectedItem.name}
-                                    </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: 'black',
+                      padding: 10,
+                    }}
+                  >
+                    <Text
+                      style={[
+                        { fontWeight: 'bold' },
+                      ]}
+                    >
+                      Price
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Text
+                      style={[
+                        { fontWeight: 'bold' },
+                      ]}
+                    >
+                      {selectedItem.price}
+                    </Text>
+                  </View>
+                </View>
 
-                                    <View
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: 'black',
-                                            borderRadius: 5,
-                                            marginTop: 10,
-                                            padding: 1,
-                                        }}
-                                    >
-                                        {/* First row of dynamic content */}
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                borderBottomColor: 'black',
-                                            }}
-                                        >
-                                            <View
-                                                style={{
-                                                    flex: 1,
-                                                    borderRightWidth: 1,
-                                                    borderRightColor: 'black',
-                                                    padding: 10,
-                                                }}
-                                            >
-                                                <Text
-                                                    style={[
-                                                        styles.text,
-                                                        { fontWeight: 'bold' },
-                                                    ]}
-                                                >
-                                                    Price
-                                                </Text>
-                                            </View>
-                                            <View
-                                                style={{ flex: 1, padding: 5 }}
-                                            >
-                                                <Text
-                                                    style={[
-                                                        styles.text,
-                                                        { fontWeight: 'bold' },
-                                                    ]}
-                                                >
-                                                    {selectedItem.price}
-                                                </Text>
-                                            </View>
-                                        </View>
+                {/* Add more rows as needed */}
+              </View>
 
-                                        {/* Add more rows as needed */}
-                                    </View>
-
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            borderRadius: 5,
-                                            padding: 10,
-                                        }}
-                                    >
-                                        <View
-                                            style={{
-                                                flex: 1,
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <Text
-                                                style={[
-                                                    styles.text,
-                                                    { fontWeight: 'bold' },
-                                                ]}
-                                            >
-                                                Qty
-                                            </Text>
-                                        </View>
-                                        <View style={{ flex: 1 }}>
-                                            <View
-                                                style={{
-                                                    borderWidth: 1,
-                                                    borderColor: 'black',
-                                                    borderRadius: 5,
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    padding: 5,
-                                                }}
-                                            >
-                                                <Text>1</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <Text
-                                        style={[
-                                            {
-                                                marginLeft: 90,
-                                                fontWeight: 'bold',
-                                                ...styles.text,
-                                            },
-                                        ]}
-                                    >
-                                        Total :₹ 405
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={handleCardModal}
-                                        style={{
-                                            backgroundColor: COLORS.primary,
-                                            padding: 10,
-                                            borderRadius: 15,
-                                            alignItems: 'center',
-                                            marginTop: 10,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: 'black',
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            ADD TO CART
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </Modal>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  borderRadius: 5,
+                  padding: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text
+                    style={[
+                      { fontWeight: 'bold' },
+                    ]}
+                  >
+                    Qty
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      borderRadius: 5,
+                      padding: 5,
+                    }}
+                  >
+                    <TextInput
+                      style={{ flex: 1 }}
+                      value={quantity}
+                      keyboardType="numeric"
+                      onChangeText={handleQuantityChange}
+                    />
+                    
+                  </View>
+                </View>
+              </View>
+              <Text
+                style={[
+                  {
+                    marginLeft: 90,
+                    fontWeight: 'bold',
+                  },
+                ]}
+              >
+                Total : ₹ {selectedItem.price * parseInt(quantity, 10)}
+              </Text>
+              <TouchableOpacity
+                onPress={handleCardModal}
+                style={{
+                  backgroundColor: COLORS.primary,
+                  padding: 10,
+                  borderRadius: 15,
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  ADD TO CART
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
             </View>
         </SafeAreaView>
     )

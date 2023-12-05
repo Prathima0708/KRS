@@ -280,9 +280,11 @@ const styles = StyleSheet.create({
     },
     rateButtonText: {
         color: COLORS.primary,
+        fontFamily: 'regular',
     },
     reorderButtonText: {
         color: COLORS.white,
+        fontFamily: 'regular',
     },
 })
 export default History
