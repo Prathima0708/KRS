@@ -69,7 +69,7 @@ const Cart = ({ navigation }) => {
     const [userCart, setUserCart] = useState([])
 
     useEffect(() => {
-        console.log('cart screen')
+       
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -126,68 +126,69 @@ const Cart = ({ navigation }) => {
         setQuantity(quantity + 1)
     }
 
-    async function deleteCartItem(id) {
-        try {
-            console.log('Deleting item:', id)
-            let headers = {
-                'Content-Type': 'application/json; charset=utf-8',
-            }
+    // async function deleteCartItem(id) {
+    //     try {
+    //         console.log('Deleting item:', id)
+    //         let headers = {
+    //             'Content-Type': 'application/json; charset=utf-8',
+    //         }
 
-            const request_model = {
-                id: id,
-            }
+    //         const request_model = {
+    //             id: id,
+    //         }
 
-            const res = await axios.post(
-                `${deleteCartItem_URL}`,
-                request_model,
-                {
-                    headers: headers,
-                }
-            )
-            async function getUserCart() {
-                const request_model = {
-                    userId: userId,
-                }
-                let headers = {
-                    'Content-Type': 'application/json; charset=utf-8',
-                }
-                try {
-                    const res = await axios.post(
-                        `${userCart_URL}`,
-                        request_model,
-                        {
-                            headers: headers,
-                        }
-                    )
+    //         const res = await axios.post(
+    //             `${deleteCartItem_URL}`,
+    //             request_model,
+    //             {
+    //                 headers: headers,
+    //             }
+    //         )
+            
+    //         // async function getUserCart() {
+    //         //     const request_model = {
+    //         //         userId: userId,
+    //         //     }
+    //         //     let headers = {
+    //         //         'Content-Type': 'application/json; charset=utf-8',
+    //         //     }
+    //         //     try {
+    //         //         const res = await axios.post(
+    //         //             `${userCart_URL}`,
+    //         //             request_model,
+    //         //             {
+    //         //                 headers: headers,
+    //         //             }
+    //         //         )
 
-                    console.log('user cart', res.data)
+    //         //         console.log('user cart', res.data)
 
-                    setUserCart(res.data)
-                } catch (e) {
-                    console.log(e)
-                }
-            }
+    //         //         setUserCart(res.data)
+    //         //     } catch (e) {
+    //         //         console.log(e)
+    //         //     }
+    //         // }
 
-            if (res.status === 200) {
-                Alert.alert('Success', 'deleted', [
-                    { text: 'OK', onPress: () => getUserCart() },
-                ])
-                console.log('Item deleted successfully:', res.data)
-            } else {
-                console.log('Unexpected status code:', res.status)
-            }
-        } catch (error) {
-            // Handle errors
-            if (error.response) {
-                console.error('Server Error:', error.response.data)
-                console.error('Status Code:', error.response.status)
-            } else if (error.request) {
-                console.error('No response received from server')
-            } else {
-                console.error('Error:', error.message)
-            }
-        }
-    }
+    //         if (res.status === 200) {
+    //             Alert.alert('Success', 'deleted', [
+    //                 { text: 'OK', onPress: () => getUserCart() },
+    //             ])
+    //             console.log('Item deleted successfully:', res.data)
+    //         } else {
+    //             console.log('Unexpected status code:', res.status)
+    //         }
+    //     } catch (error) {
+    //         // Handle errors
+    //         if (error.response) {
+    //             console.error('Server Error:', error.response.data)
+    //             console.error('Status Code:', error.response.status)
+    //         } else if (error.request) {
+    //             console.error('No response received from server')
+    //         } else {
+    //             console.error('Error:', error.message)
+    //         }
+    //     }
+    // }
 
     async function placeOrder() {
         console.log('Pressed')
@@ -233,6 +234,76 @@ const Cart = ({ navigation }) => {
         } finally {
         }
     }
+
+    async function getUserCart() {
+        const request_model = {
+          userId: userId, // Make sure userId is accessible
+        };
+        let headers = {
+          'Content-Type': 'application/json; charset=utf-8',
+        };
+        try {
+          const res = await axios.post(
+            `${userCart_URL}`,
+            request_model,
+            {
+              headers: headers,
+            }
+          );
+      
+          console.log('user cart', res.data);
+      
+          // Update the userCart state with the latest data
+          setUserCart(res.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+    async function deleteCartItem(id) {
+        try {
+          console.log('Deleting item:', id);
+          let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+          };
+      
+          const request_model = {
+            id: id,
+          };
+      
+          const res = await axios.post(
+            `${deleteCartItem_URL}`,
+            request_model,
+            {
+              headers: headers,
+            }
+          );
+      
+          if (res.status === 200) {
+            // Fetch the latest user cart data after deletion
+            await getUserCart();
+      
+            Alert.alert('Success', 'Deleted');
+            console.log('Item deleted successfully:', res.data);
+          } else {
+            console.log('Unexpected status code:', res.status);
+          }
+        } catch (error) {
+          // Handle errors
+          if (error.response) {
+            console.error('Server Error:', error.response.data);
+            console.error('Status Code:', error.response.status);
+          } else if (error.request) {
+            console.error('No response received from server');
+          } else {
+            console.error('Error:', error.message);
+          }
+        }
+      }
+      
+      // Assuming this function is defined in your component
+    
+      
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

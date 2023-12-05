@@ -145,6 +145,28 @@ const Order = ({ navigation }) => {
     ]
 
     useEffect(() => {
+      
+        const getUserId = async () => {
+            try {
+                // Retrieve the value of "userid" from AsyncStorage
+                const userid = await AsyncStorage.getItem('userid')
+
+                // Check if the value is present
+                if (userid !== null) {
+                    setUserId(userid)
+                    console.log('User ID:', userid)
+                } else {
+                    console.log('User ID not found in AsyncStorage')
+                }
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getUserId()
+    }, [])
+
+    useEffect(() => {
         async function getAllProducts() {
             try {
                 const res = await axios.post(`${getAllProducts_URL}`)
@@ -185,27 +207,7 @@ const Order = ({ navigation }) => {
 
     console.log('cart count', cartCount)
 
-    useEffect(() => {
-        console.log('products screen')
-        const getUserId = async () => {
-            try {
-                // Retrieve the value of "userid" from AsyncStorage
-                const userid = await AsyncStorage.getItem('userid')
-
-                // Check if the value is present
-                if (userid !== null) {
-                    setUserId(userid)
-                    console.log('User ID:', userid)
-                } else {
-                    console.log('User ID not found in AsyncStorage')
-                }
-            } catch (error) {
-                console.error('Error retrieving user ID:', error)
-            }
-        }
-
-        getUserId()
-    }, [])
+   
 
     console.log('User ID in products screen:', userId)
 
@@ -355,7 +357,7 @@ const Order = ({ navigation }) => {
         )
 
         // Toggle favorite status
-        const isFavorite = existingFavoriteProducts.includes(item.id)
+        const isFavorite = existingFavoriteProducts?.includes(item.id)
 
         // Combine existing and new product IDs
         const updatedProductIds = isFavorite
@@ -519,6 +521,20 @@ const Order = ({ navigation }) => {
             const res = await axios.post(`${addToCart_URL}`, request_model, {
                 headers: headers,
             })
+            async function getCartCount() {
+                try {
+                    const res = await axios.post(`${userCart_URL}`, request_model, {
+                        headers: headers,
+                    })
+    
+                   
+    
+                    setCartCount(res.data.length)
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+            getCartCount()
         } catch (error) {
             console.log('Error ', error)
         } finally {
@@ -566,6 +582,7 @@ const Order = ({ navigation }) => {
         //       // setIsLoading(false)
         //   }
     }
+    
     // function handleCardModal() {
 
     //   // alert("Added to cart")
