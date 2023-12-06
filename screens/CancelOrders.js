@@ -22,7 +22,7 @@ const CancelOrders = ({ navigation,route }) => {
      */
 
     var selectedItem;
-    const { productDetails } = route.params;
+    const { productDetails,orderNumber } = route.params;
 
     const renderContent = () => {
         const [comment, setComment] = useState('')
@@ -139,9 +139,9 @@ const CancelOrders = ({ navigation,route }) => {
 
     async function handleSubmit() {
         console.log('Product Details:', productDetails);
-        // console.log('Selected Reason:', selectedReason);
+        console.log('order number:', orderNumber);
         const request_body={
-            orderId: "string",
+            orderNumber: "string",
             productId: productDetails.productId,
             reason: selectedItem,
             returnDate: "2023-12-05T09:56:10.169Z",

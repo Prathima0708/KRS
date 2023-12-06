@@ -540,7 +540,12 @@ const Order = ({ navigation }) => {
         const request_model = {
             userId: userId,
             // productIds: selectedProductIds,
-            productIds: [selectedItem.id],
+            products: [
+                {
+                    productId:selectedItem.id,
+                    quantity:quantity
+                }
+            ],
         }
 
         try {
@@ -574,6 +579,8 @@ const Order = ({ navigation }) => {
         } finally {
             setIsLoading(false)
         }
+
+
         // try {
         //   // setIsLoading(true)
 

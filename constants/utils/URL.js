@@ -17,6 +17,8 @@ export const deleteFavorites_URL="http://13.239.122.212:8080/api/favourites/dele
 
 export const userCart_URL="http://13.239.122.212:8080/api/wishlists/userWishlist"
 export const deleteCartItem_URL="http://13.239.122.212:8080/api/wishlists/deleteWishlist"
+export const deleteUserWishlist_URL="http://13.239.122.212:8080/api/wishlists/deleteUserWishlist"
+
 export const placeOrder_URL="http://13.239.122.212:8080/api/orders"
 
 export const returnItem_URL="http://13.239.122.212:8080/api/returnItem"

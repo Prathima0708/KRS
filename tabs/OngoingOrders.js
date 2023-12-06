@@ -42,17 +42,24 @@ const OngoingOrders = () => {
         const request_body={
             userId:userId
         }
+        console.log(request_body)
         async function getItems() {
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
             try {
-                const res = await axios.post(`${getUserOrders_URL}`,request_body)
-
+                const res = await axios.post(`${getUserOrders_URL}`,request_body,{
+                    headers:headers
+                }
+                )
+                console.log('res',res.data)
                 const formattedData = res.data.map(order => ({
                     ...order,
                     items: order.items.map(item => JSON.stringify(item)),
                 }));
 
                 setData(formattedData);
-                console.log(formattedData)
+              //  console.log("formatted data",formattedData)
             } catch (e) {
                 console.log(e)
             }
@@ -125,7 +132,11 @@ const OngoingOrders = () => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={() =>
-                                            navigation.navigate('CancelOrders',{productDetails})
+                                            console.log('Navigating to CancelOrders with orderNumber:', data.orderNumber)
+                                            // navigation.navigate('CancelOrders',{
+                                            //     productDetails,
+                                            //     orderNumber: item.orderNumber,
+                                            // })
                                         }
                                         style={styles.cancelButton}
                                     >

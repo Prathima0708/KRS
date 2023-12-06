@@ -23,6 +23,7 @@ import { StyleSheet } from 'react-native'
 import { useEffect } from 'react'
 import {
     deleteCartItem_URL,
+    deleteUserWishlist_URL,
     fetchProductDetails,
     placeOrder_URL,
     userCart_URL,
@@ -340,6 +341,45 @@ const Cart = ({ navigation }) => {
 
     // Assuming this function is defined in your component
 
+    async function clearCart() {
+
+        const request_body={
+            userId: userId
+        }
+
+        try {
+            
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+
+            const res = await axios.post(
+                `${deleteUserWishlist_URL}`,
+                request_body,
+                {
+                    headers: headers,
+                }
+            )
+
+            if (res) {
+                // Fetch the latest user cart data after deletion
+                Alert.alert('All Cart items Cleared')
+                await getUserCart()
+            } else {
+                console.log('Unexpected status code:', res.status)
+            }
+        } catch (error) {
+            // Handle errors
+            if (error.response) {
+                
+            } else if (error.request) {
+                console.error('No response received from server')
+            } else {
+                console.error('Error:', error.message)
+            }
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar hidden={true} />
@@ -527,12 +567,12 @@ const Cart = ({ navigation }) => {
                         </View>
                     </View> */}
                 </View>
-                {/* <Button
+                <Button
                     filled
                     title="Clear Cart"
-                    // onPress={() => navigation.navigate('PaymentMethod')}
+                    onPress={clearCart}
                     style={{ marginVertical: 2, backgroundColor: 'red' }}
-                /> */}
+                />
                 <Button
                     filled
                     title="PLACE ORDER"

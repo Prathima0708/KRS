@@ -67,7 +67,7 @@ const Favourite = ({ navigation }) => {
         }
       
         getAllFavorites();
-      }, []);
+      }, [userId]);
 
       useEffect(() => {
         async function getProductDetails() {
