@@ -141,7 +141,7 @@ const CancelOrders = ({ navigation,route }) => {
         console.log('Product Details:', productDetails);
         console.log('order number:', orderNumber);
         const request_body={
-            orderNumber: "string",
+            orderId: orderNumber,
             productId: productDetails.productId,
             reason: selectedItem,
             returnDate: "2023-12-05T09:56:10.169Z",
@@ -165,7 +165,7 @@ const CancelOrders = ({ navigation,route }) => {
 
             if (res.data) {
                 console.log('API response:', res.data)
-                navigation.goBack()
+                // navigation.goBack()
             }
         } catch (error) {
             console.log('error', error)

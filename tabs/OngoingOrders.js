@@ -52,14 +52,13 @@ const OngoingOrders = () => {
                     headers:headers
                 }
                 )
-                console.log('res',res.data)
+                // console.log('res',res.data)
                 const formattedData = res.data.map(order => ({
                     ...order,
                     items: order.items.map(item => JSON.stringify(item)),
                 }));
-
+  
                 setData(formattedData);
-              //  console.log("formatted data",formattedData)
             } catch (e) {
                 console.log(e)
             }
@@ -132,7 +131,7 @@ const OngoingOrders = () => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={() =>
-                                            // console.log('Navigating to CancelOrders with orderNumber:', data.orderNumber)
+                                            // console.log('ITEMS', item.orderNumber)
                                             navigation.navigate('CancelOrders',{
                                                 productDetails,
                                                 orderNumber: item.orderNumber,
