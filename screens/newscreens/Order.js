@@ -75,14 +75,14 @@ const Order = ({ navigation }) => {
 
     const [cartCount, setCartCount] = useState(0)
 
-    const [quantity, setQuantity] = useState('1');
+    const [quantity, setQuantity] = useState('1')
 
     const handleQuantityChange = (newQuantity) => {
-      // Validate the input to ensure it's a positive integer
-      if (/^[1-9]\d*$/.test(newQuantity)) {
-        setQuantity(newQuantity);
-      }
-    };
+        // Validate the input to ensure it's a positive integer
+        if (/^[1-9]\d*$/.test(newQuantity)) {
+            setQuantity(newQuantity)
+        }
+    }
 
     // const brands = [
     //   // Define your brands data here
@@ -155,7 +155,6 @@ const Order = ({ navigation }) => {
     ]
 
     useEffect(() => {
-      
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -180,7 +179,7 @@ const Order = ({ navigation }) => {
         async function getAllProducts() {
             try {
                 const res = await axios.post(`${getAllProducts_URL}`)
-                console.log('all products', res.data)
+                
 
                 setAllProducts(res.data)
             } catch (e) {
@@ -204,8 +203,6 @@ const Order = ({ navigation }) => {
                     headers: headers,
                 })
 
-               
-
                 setCartCount(res.data.length)
             } catch (e) {
                 console.log(e)
@@ -214,9 +211,6 @@ const Order = ({ navigation }) => {
 
         getCartCount()
     }, [userId])
-
-
-   
 
     console.log('User ID in products screen:', userId)
 
@@ -244,7 +238,6 @@ const Order = ({ navigation }) => {
         async function getBrands() {
             try {
                 const res = await axios.get(`${getBrands_URL}`)
-                console.log('brands', res.data)
 
                 // Extracting the 'name' property from each object in the array
                 const brandNames = res.data.map((brand) => brand.name)
@@ -338,32 +331,35 @@ const Order = ({ navigation }) => {
         const getIDs = async () => {
             const request_body = {
                 userId: userId,
-            };
-    
-            try {
-                const res = await axios.post(`${getFavoritesByUserId_URL}`, request_body);
-                const favoriteProducts = res.data; 
-                const allProductIds = res.data.reduce((acc, item) => {
-                    acc.push(...item.productIds);
-                    return acc;
-                }, []);
-    
-                const uniqueProductIds = [...new Set(allProductIds)];
-    
-                const matchingProductIds = allProducts
-                    .filter(product => uniqueProductIds.includes(product.id))
-                    .map(product => product.id);
-
-                setmatchingProductIds(matchingProductIds);
-
-            } catch (error) {
-                console.error('Error retrieving user ID:', error);
             }
-        };
-    
-        getIDs();
-    }, [userId, allProducts]);
-    
+
+            try {
+                const res = await axios.post(
+                    `${getFavoritesByUserId_URL}`,
+                    request_body
+                )
+                const favoriteProducts = res.data
+                const allProductIds = res.data.reduce((acc, item) => {
+                    acc.push(...item.productIds)
+                    return acc
+                }, [])
+
+                const uniqueProductIds = [...new Set(allProductIds)]
+
+                const matchingProductIds = allProducts
+                    .filter((product) => uniqueProductIds.includes(product.id))
+                    .map((product) => product.id)
+
+                setmatchingProductIds(matchingProductIds)
+            } catch (error) {
+                console.error('Error retrieving user ID:', error)
+            }
+        }
+
+        getIDs()
+    }, [userId, allProducts])
+
+    console.log('matching id', matchingProductIds)
 
     const handleFavoriteItem = async (item) => {
 
@@ -421,65 +417,85 @@ const Order = ({ navigation }) => {
         }
     }
 
-    // const handleFavoriteItem = (item) => {
-    //     setIsCardClicked(!isCardClicked)
-    //     setCartModalVisible(false)
-    //     setSelectedCardIndex(item.id)
+    // const handleFavoriteItem = async (item) => {
+    //     // Assuming you have userId available, replace 'yourUserId' with the actual userId
 
-    //     const object = {
-    //         item_id: item.id,
-    //         clicked_status: true,
-    //     }
-
-    //     const existingItemIndex = favoriteItems.findIndex(
-    //         (item) => item.item_id === object.item_id
+    //     // Fetch existing favorite product IDs for the user
+    //     const existingFavoriteProducts = favoriteItems.map(
+    //         (favItem) => favItem.item_id
     //     )
+    //     console.log(existingFavoriteProducts)
 
-    //     if (existingItemIndex !== -1) {
-    //         // If the item exists, toggle the clicked_status
-    //         const updatedItems = [...favoriteItems]
-    //         updatedItems[existingItemIndex].clicked_status =
-    //             !updatedItems[existingItemIndex].clicked_status
-    //         setFavoriteItems(updatedItems)
+    //     // Toggle favorite status
+    //     const isFavorite = existingFavoriteProducts.includes(item.id)
+
+    //     let updatedProductIds
+
+    //     if (isFavorite) {
+    //         // Remove from favorites
+    //         const response = await fetch(
+    //             'http://13.239.122.212:8080/api/favourites/deleteFavourite',
+    //             {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({
+    //                     // userId: userId,
+    //                     id: [item.id],
+    //                 }),
+    //             }
+    //         )
+
+    //         if (response.ok) {
+    //             // Update product IDs after removal
+    //             updatedProductIds = existingFavoriteProducts.filter(
+    //                 (productId) => productId !== item.id
+    //             )
+    //         } else {
+    //             // Handle error if the delete request fails
+    //             console.error('Failed to remove from favorites')
+    //             return
+    //         }
     //     } else {
-    //         // If the item does not exist, add it with clicked_status as true
-    //         setFavoriteItems((prevArray) => [...prevArray, object])
+    //         // Add to favorites
+    //         const response = await fetch(
+    //             'http://13.239.122.212:8080/api/favourites',
+    //             {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({
+    //                     userId: userId,
+    //                     productIds: [item.id],
+    //                 }),
+    //             }
+    //         )
+
+    //         if (response.ok) {
+    //             // Update product IDs after addition
+    //             updatedProductIds = [...existingFavoriteProducts, item.id]
+    //         } else {
+    //             // Handle error if the post request fails
+    //             console.error('Failed to add to favorites')
+    //             return
+    //         }
     //     }
 
-    //     console.log(favoriteItems)
+    //     // Update favoriteItems array based on the response
+    //     const updatedFavoriteItems = updatedProductIds.map((productId) => ({
+    //         item_id: productId,
+    //         clicked_status: !isFavorite,
+    //     }))
 
-    //     const itemIdsArray = favoriteItems.map((item) => item.item_id)
+    //     // Update state with the new favoriteItems array
+    //     setFavoriteItems(updatedFavoriteItems)
 
-    //     console.log(itemIdsArray)
-
-    //     const response = fetch(`${favoriteItemPost_URL}`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             userId: userId,
-    //             productIds: [itemIdsArray],
-    //         }),
-    //     })
-
-    //     if (response.ok) {
-    //         const responseData = response.json()
-    //         console.log('API response:', responseData)
-    //         // Handle successful signup, e.g., navigate to the login screen
-    //     } else {
-    //         // throw new Error('Signin failed')
-    //     }
+    //     // Update matchingProductIds to instantly reflect UI changes
+    //     setmatchingProductIds(updatedProductIds)
     // }
-    // const handleOpenCartModal = (item) => {
-    //     setIsCardClicked(!isCardClicked)
-    //     setCartModalVisible(true)
-    //     setSelectedCardIndex(item.id)
 
-    //     setSelectedItem(item)
-
-    //     console.log(selectedItem)
-    // }
     const showModal = (productDetails) => {
         setSelectedItem(productDetails)
         setCartModalVisible(true)
@@ -509,7 +525,7 @@ const Order = ({ navigation }) => {
     }
 
     const handleCardModal = async (item) => {
-        const total = selectedItem.price * parseInt(quantity, 10);
+        const total = selectedItem.price * parseInt(quantity, 10)
         setSelectedProductIds((prevIds) => [...prevIds, item.id])
         setCartItems((prevItems) => prevItems + 1)
         setCartModalVisible(false)
@@ -539,12 +555,14 @@ const Order = ({ navigation }) => {
             })
             async function getCartCount() {
                 try {
-                    const res = await axios.post(`${userCart_URL}`, request_model, {
-                        headers: headers,
-                    })
-    
-                   
-    
+                    const res = await axios.post(
+                        `${userCart_URL}`,
+                        request_model,
+                        {
+                            headers: headers,
+                        }
+                    )
+
                     setCartCount(res.data.length)
                 } catch (e) {
                     console.log(e)
@@ -598,7 +616,7 @@ const Order = ({ navigation }) => {
         //       // setIsLoading(false)
         //   }
     }
-    
+
     // function handleCardModal() {
 
     //   // alert("Added to cart")
@@ -1097,7 +1115,7 @@ const Order = ({ navigation }) => {
                                         }
                                     >
                                         <Text style={{ fontSize: 18 }}>
-                                            {item.name}
+                                            {item.id}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -1132,15 +1150,19 @@ const Order = ({ navigation }) => {
                                         style={{ marginLeft: 100 }}
                                     >
                                         <MaterialCommunityIcons
+                                            // name={
+                                            //     favoriteItems.find(
+                                            //         (favItem) =>
+                                            //             favItem.item_id ===
+                                            //             item.id
+                                            //     )?.clicked_status
+                                            //         ? 'heart'
+                                            //         : 'heart-outline'
+                                            // }
                                             name={
-                                                favoriteItems.find(
-                                                    (favItem) =>
-                                                        favItem.item_id ===
-                                                        item.id
-                                                )?.clicked_status
-                                                    ? 'heart'
-                                                    : 'heart-outline' ||
-                                                matchingProductIds?.includes(item.id)
+                                                matchingProductIds?.includes(
+                                                    item.id
+                                                )
                                                     ? 'heart'
                                                     : 'heart-outline'
                                             }
@@ -1156,167 +1178,171 @@ const Order = ({ navigation }) => {
                 </ScrollView>
 
                 <Modal
-      animationType="slide"
-      transparent={true}
-      visible={cartModalVisible}
-      onRequestClose={closeModal}
-    >
-      <TouchableWithoutFeedback onPress={closeModal}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: 'white',
-              padding: 16,
-              borderRadius: 10,
-              width: 300,
-              borderWidth: 1,
-              borderColor: 'black',
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontFamily: 'regular',
-                }}
-              >
-                {selectedItem.name}
-              </Text>
-
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'black',
-                  borderRadius: 5,
-                  marginTop: 10,
-                  padding: 1,
-                }}
-              >
-                {/* First row of dynamic content */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    borderBottomColor: 'black',
-                  }}
+                    animationType="slide"
+                    transparent={true}
+                    visible={cartModalVisible}
+                    onRequestClose={closeModal}
                 >
-                  <View
-                    style={{
-                      flex: 1,
-                      borderRightWidth: 1,
-                      borderRightColor: 'black',
-                      padding: 10,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        { fontWeight: 'bold' },
-                      ]}
-                    >
-                      Price
-                    </Text>
-                  </View>
-                  <View style={{ flex: 1, padding: 5 }}>
-                    <Text
-                      style={[
-                        { fontWeight: 'bold' },
-                      ]}
-                    >
-                      {selectedItem.price}
-                    </Text>
-                  </View>
-                </View>
+                    <TouchableWithoutFeedback onPress={closeModal}>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor: 'white',
+                                    padding: 16,
+                                    borderRadius: 10,
+                                    width: 300,
+                                    borderWidth: 1,
+                                    borderColor: 'black',
+                                }}
+                            >
+                                <View>
+                                    <Text
+                                        style={{
+                                            fontSize: 16,
+                                            fontFamily: 'regular',
+                                        }}
+                                    >
+                                        {selectedItem.name}
+                                    </Text>
 
-                {/* Add more rows as needed */}
-              </View>
+                                    <View
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: 'black',
+                                            borderRadius: 5,
+                                            marginTop: 10,
+                                            padding: 1,
+                                        }}
+                                    >
+                                        {/* First row of dynamic content */}
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                borderBottomColor: 'black',
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    flex: 1,
+                                                    borderRightWidth: 1,
+                                                    borderRightColor: 'black',
+                                                    padding: 10,
+                                                }}
+                                            >
+                                                <Text
+                                                    style={[
+                                                        { fontWeight: 'bold' },
+                                                    ]}
+                                                >
+                                                    Price
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{ flex: 1, padding: 5 }}
+                                            >
+                                                <Text
+                                                    style={[
+                                                        { fontWeight: 'bold' },
+                                                    ]}
+                                                >
+                                                    {selectedItem.price}
+                                                </Text>
+                                            </View>
+                                        </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  borderRadius: 5,
-                  padding: 10,
-                }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
-                    style={[
-                      { fontWeight: 'bold' },
-                    ]}
-                  >
-                    Qty
-                  </Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      borderWidth: 1,
-                      borderColor: 'black',
-                      borderRadius: 5,
-                      padding: 5,
-                    }}
-                  >
-                    <TextInput
-                      style={{ flex: 1 }}
-                      value={quantity}
-                      keyboardType="numeric"
-                      onChangeText={handleQuantityChange}
-                    />
-                    
-                  </View>
-                </View>
-              </View>
-              <Text
-                style={[
-                  {
-                    marginLeft: 90,
-                    fontWeight: 'bold',
-                  },
-                ]}
-              >
-                Total : ₹ {selectedItem.price * parseInt(quantity, 10)}
-              </Text>
-              <TouchableOpacity
-                onPress={handleCardModal}
-                style={{
-                  backgroundColor: COLORS.primary,
-                  padding: 10,
-                  borderRadius: 15,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  ADD TO CART
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+                                        {/* Add more rows as needed */}
+                                    </View>
+
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            borderRadius: 5,
+                                            padding: 10,
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                flex: 1,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <Text
+                                                style={[{ fontWeight: 'bold' }]}
+                                            >
+                                                Qty
+                                            </Text>
+                                        </View>
+                                        <View style={{ flex: 1 }}>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent:
+                                                        'space-between',
+                                                    borderWidth: 1,
+                                                    borderColor: 'black',
+                                                    borderRadius: 5,
+                                                    padding: 5,
+                                                }}
+                                            >
+                                                <TextInput
+                                                    style={{ flex: 1 }}
+                                                    value={quantity}
+                                                    keyboardType="numeric"
+                                                    onChangeText={
+                                                        handleQuantityChange
+                                                    }
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <Text
+                                        style={[
+                                            {
+                                                marginLeft: 90,
+                                                fontWeight: 'bold',
+                                            },
+                                        ]}
+                                    >
+                                        Total : ₹{' '}
+                                        {selectedItem.price *
+                                            parseInt(quantity, 10)}
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={handleCardModal}
+                                        style={{
+                                            backgroundColor: COLORS.primary,
+                                            padding: 10,
+                                            borderRadius: 15,
+                                            alignItems: 'center',
+                                            marginTop: 10,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: 'white',
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            ADD TO CART
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </Modal>
             </View>
         </SafeAreaView>
     )
