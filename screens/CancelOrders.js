@@ -11,23 +11,33 @@ import { COLORS, SIZES } from '../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ReasonItem from '../components/ReasonItem'
 import Header from '../components/Header'
+import axios from 'axios'
+import { returnItem_URL } from '../constants/utils/URL'
 
-const CancelOrders = ({ navigation }) => {
+
+
+const CancelOrders = ({ navigation,route }) => {
     /***
      * Render content
      */
 
+    var selectedItem;
+    const { productDetails } = route.params;
+
     const renderContent = () => {
         const [comment, setComment] = useState('')
-        const [selectedItem, setSelectedItem] = useState(null)
+        // const [selectedItem, setSelectedItem] = useState(null)
 
         const handleCheckboxPress = (itemTitle) => {
             if (selectedItem === itemTitle) {
                 // If the clicked item is already selected, deselect it
-                setSelectedItem(null)
+                // setSelectedItem(null)
+                selectedItem=null
+
             } else {
                 // Otherwise, select the clicked item
-                setSelectedItem(itemTitle)
+                // setSelectedItem(itemTitle)
+                selectedItem=itemTitle
             }
         }
 
@@ -117,7 +127,8 @@ const CancelOrders = ({ navigation }) => {
         return (
             <View style={styles.btnContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.goBack()}
+                    // onPress={() => navigation.goBack()}
+                    onPress={handleSubmit}
                     style={styles.btn}
                 >
                     <Text style={styles.btnText}>Submit</Text>
@@ -125,6 +136,43 @@ const CancelOrders = ({ navigation }) => {
             </View>
         )
     }
+
+    async function handleSubmit() {
+        console.log('Product Details:', productDetails);
+        // console.log('Selected Reason:', selectedReason);
+        const request_body={
+            orderId: "string",
+            productId: productDetails.productId,
+            reason: selectedItem,
+            returnDate: "2023-12-05T09:56:10.169Z",
+            status: "string"
+        }
+
+        console.log(request_body)
+        
+        try {
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+
+            const res = await axios.post(
+                `${returnItem_URL}`,
+                request_body, // Move request_body to the data property
+                {
+                    headers: headers,
+                }
+            )
+
+            if (res.data) {
+                console.log('API response:', res.data)
+                navigation.goBack()
+            }
+        } catch (error) {
+            console.log('error', error)
+        } finally {
+        }
+    }
+
 
     return (
         <SafeAreaView style={styles.area}>
