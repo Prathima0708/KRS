@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-virtualized-view'
 import FavouriteCard from '../components/FavouriteCard'
 import { products } from '../data/products'
 import Header from '../components/Header'
-import { getFavorites_URL } from '../constants/utils/URL'
+import { fetchProductDetails, getFavoritesByUserId_URL, getFavorites_URL } from '../constants/utils/URL'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -16,8 +16,11 @@ const Favourite = ({ navigation }) => {
      */
     const [favorites,setFavorites]=useState([]); 
     const[userId,setUserId]=useState('')
+    const [fetchProductIds, setFetchProductIds] = useState([])
+    const [productInfo,setProductInfo]=useState([])
+
     useEffect(() => {
-        console.log('products screen')
+     
         const getUserId = async () => {
             try {
                 // Retrieve the value of "userid" from AsyncStorage
@@ -37,12 +40,27 @@ const Favourite = ({ navigation }) => {
 
         getUserId()
     }, [])
+
+
       useEffect(() => {
+        const request_body={
+            userId:userId
+          }
+          let headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+        }
         async function getAllFavorites() {
           try {
-            const res = await axios.post(`${getFavorites_URL}`);
+            const res = await axios.post(`${getFavoritesByUserId_URL}`,request_body,{
+                headers:headers
+            });
       
             setFavorites(res.data);
+            const productIds = res.data.reduce((acc, cartItem) => {
+                acc.push(...cartItem.productIds)
+                return acc
+            }, [])
+            setFetchProductIds(productIds)
           } catch (e) {
             console.log(e);
           }
@@ -50,17 +68,44 @@ const Favourite = ({ navigation }) => {
       
         getAllFavorites();
       }, []);
+
+      useEffect(() => {
+        async function getProductDetails() {
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+            try {
+                const res = await axios.post(
+                    `${fetchProductDetails}`,
+                    fetchProductIds,
+                    {
+                        headers: headers,
+                    }
+                )
+              
+                console.log('each product details',res.data[0]?.brand)
+                setProductInfo(res.data[0]?.brand)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        getProductDetails()
+    }, [userId,fetchProductIds])
+
     function renderMyFavouriteShops() {
         return (
             <View>
                 <FlatList
-                    data={products}
+                    data={favorites}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => (
                         <FavouriteCard
                             image={item.image}
-                            shop={item.shop}
-                            name={item.name}
+                            shop={productInfo?.description}
+                           // shop={item.shop}
+                            name={productInfo?.name}
+                           // name={item.productIds}
                             price={item.price}
                         />
                     )}

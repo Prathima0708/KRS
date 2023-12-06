@@ -126,6 +126,7 @@ const Cart = ({ navigation }) => {
     }, [userId])
 
     console.log('product id',fetchProductIds)
+
     useEffect(() => {
         async function getProductDetails() {
             let headers = {
