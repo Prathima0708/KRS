@@ -23,3 +23,4 @@ export const placeOrder_URL="http://13.239.122.212:8080/api/orders"
 
 export const returnItem_URL="http://13.239.122.212:8080/api/returnItem"
 export const fetchProductDetails="http://13.239.122.212:8080/api/products/productDetails"
+export const fetchProductDetailsById="http://13.239.122.212:8080/api/products/getProductById"

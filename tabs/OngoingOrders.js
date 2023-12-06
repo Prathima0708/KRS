@@ -132,11 +132,11 @@ const OngoingOrders = () => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={() =>
-                                            console.log('Navigating to CancelOrders with orderNumber:', data.orderNumber)
-                                            // navigation.navigate('CancelOrders',{
-                                            //     productDetails,
-                                            //     orderNumber: item.orderNumber,
-                                            // })
+                                            // console.log('Navigating to CancelOrders with orderNumber:', data.orderNumber)
+                                            navigation.navigate('CancelOrders',{
+                                                productDetails,
+                                                orderNumber: item.orderNumber,
+                                            })
                                         }
                                         style={styles.cancelButton}
                                     >
