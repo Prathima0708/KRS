@@ -1121,8 +1121,11 @@ const Order = ({ navigation }) => {
                                             handleOpenCartModal(item)
                                         }
                                     >
+                                        {/* <Text style={{ fontSize: 18 }}>
+                                           {item.id}
+                                        </Text> */}
                                         <Text style={{ fontSize: 18 }}>
-                                            {item.id}
+                                           {item.description}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -1157,22 +1160,22 @@ const Order = ({ navigation }) => {
                                         style={{ marginLeft: 100 }}
                                     >
                                         <MaterialCommunityIcons
-                                            // name={
-                                            //     favoriteItems.find(
-                                            //         (favItem) =>
-                                            //             favItem.item_id ===
-                                            //             item.id
-                                            //     )?.clicked_status
-                                            //         ? 'heart'
-                                            //         : 'heart-outline'
-                                            // }
                                             name={
-                                                matchingProductIds?.includes(
-                                                    item.id
-                                                )
+                                                favoriteItems.find(
+                                                    (favItem) =>
+                                                        favItem.item_id ===
+                                                        item.id
+                                                )?.clicked_status
                                                     ? 'heart'
                                                     : 'heart-outline'
                                             }
+                                            // name={
+                                            //     matchingProductIds?.includes(
+                                            //         item.id
+                                            //     )
+                                            //         ? 'heart'
+                                            //         : 'heart-outline'
+                                            // }
                                             size={20}
                                             color="red"
                                             // name={favoriteItems.===item.id ? "heart" : "heart-outline"} size={20} color="red"

@@ -21,28 +21,30 @@ const CancelOrders = ({ navigation,route }) => {
      * Render content
      */
 
-    var selectedItem;
+    var local_var,comment;
     const { productDetails,orderNumber } = route.params;
 
     const renderContent = () => {
-        const [comment, setComment] = useState('')
-        // const [selectedItem, setSelectedItem] = useState(null)
+        // const [comment, setComment] = useState('')
+        const [selectedItem, setSelectedItem] = useState(null)
 
         const handleCheckboxPress = (itemTitle) => {
             if (selectedItem === itemTitle) {
                 // If the clicked item is already selected, deselect it
-                // setSelectedItem(null)
-                selectedItem=null
+                setSelectedItem(null)
+              
+                // selectedItem=null
 
             } else {
                 // Otherwise, select the clicked item
-                // setSelectedItem(itemTitle)
-                selectedItem=itemTitle
+                setSelectedItem(itemTitle)
+               // local_var=itemTitle
+                // selectedItem=itemTitle
             }
         }
-
+        local_var=selectedItem
         const handleCommentChange = (text) => {
-            setComment(text)
+            comment=text;
         }
         return (
             <View style={{ marginVertical: 12 }}>
@@ -138,14 +140,14 @@ const CancelOrders = ({ navigation,route }) => {
     }
 
     async function handleSubmit() {
-        console.log('Product Details:', productDetails);
-        console.log('order number:', orderNumber);
+
         const request_body={
             orderId: orderNumber,
             productId: productDetails.productId,
-            reason: selectedItem,
+            reason: local_var,
             returnDate: "2023-12-05T09:56:10.169Z",
-            status: "string"
+            status: "string",
+            detailedReason: comment
         }
 
         console.log(request_body)
