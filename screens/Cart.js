@@ -422,7 +422,19 @@ const Cart = ({ navigation }) => {
                     </View>
                 </View>
 
-                <FlatList
+                {userCart.length===0 &&   <Text
+                            style={{
+                           textAlign:'center',
+                           justifyContent:'center',
+                           alignItems:'center',
+                                fontFamily: 'regular',
+                                color: COLORS.black,
+                            }}
+                        >
+                           No items in the cart!
+                        </Text>}
+
+              { userCart.length > 0&& <FlatList
                     data={userCart}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
@@ -505,9 +517,9 @@ const Cart = ({ navigation }) => {
                             </View>
                         )
                     }}
-                />
+                />}
             </View>
-            <Animatable.View animation="fadeInUpBig" style={cartStyles.footer}>
+           {userCart.length > 0&& <Animatable.View animation="fadeInUpBig" style={cartStyles.footer}>
                 {/* <View
                     style={{
                         flexDirection: 'row',
@@ -580,7 +592,7 @@ const Cart = ({ navigation }) => {
                     onPress={placeOrder}
                     style={{ marginVertical: 2 }}
                 />
-            </Animatable.View>
+            </Animatable.View>}
             <Modal
                 animationType="slide"
                 transparent={true}
