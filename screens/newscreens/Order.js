@@ -33,6 +33,7 @@ import Header from '../../components/Header'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import {
     addToCart_URL,
+    deleteFavorites_URL,
     favoriteItemPost_URL,
     getAllProducts_URL,
     getBrands_URL,
@@ -71,7 +72,7 @@ const Order = ({ navigation }) => {
 
     const [userId, setUserId] = useState('')
     const [selectedProductIds, setSelectedProductIds] = useState([])
-    const [matchingProductIds, setmatchingProductIds] = useState()
+    const [apiProductIds, setApiProductIds] = useState()
 
     const [cartCount, setCartCount] = useState(0)
 
@@ -212,8 +213,6 @@ const Order = ({ navigation }) => {
         getCartCount()
     }, [userId])
 
-    console.log('User ID in products screen:', userId)
-
     useEffect(() => {
         async function getCategories() {
             try {
@@ -333,33 +332,32 @@ const Order = ({ navigation }) => {
                 userId: userId,
             }
 
+            let headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+            }
+
             try {
-                const res = await axios.post(
-                    `${getFavoritesByUserId_URL}`,
-                    request_body
-                )
-                const favoriteProducts = res.data
-                const allProductIds = res.data.reduce((acc, item) => {
-                    acc.push(...item.productIds)
-                    return acc
-                }, [])
+                const res = await axios.post(`${getFavoritesByUserId_URL}`,request_body,{
+                    headers:headers
+                })
 
-                const uniqueProductIds = [...new Set(allProductIds)]
+                
+                const formattedData = res.data.map(order => ({
+                    id: order.id,
+                    products: order.products ? order.products.map(product => ({
+                      productId: product.productId,
+                    })) : null,
+                  }));
+                  
+                  setApiProductIds(formattedData)
 
-                const matchingProductIds = allProducts
-                    .filter((product) => uniqueProductIds.includes(product.id))
-                    .map((product) => product.id)
-
-                setmatchingProductIds(matchingProductIds)
             } catch (error) {
-                console.error('Error retrieving user ID:', error)
+                console.error('Error while getting product ids', error);
             }
         }
 
         getIDs()
-    }, [userId, allProducts])
-
-    console.log('matching id', matchingProductIds)
+    }, [userId]);
 
     const handleFavoriteItem = async (item) => {
 
@@ -367,54 +365,114 @@ const Order = ({ navigation }) => {
             (favItem) => favItem.item_id
         )
 
-        // Toggle favorite status
+        // // Toggle favorite status
         const isFavorite = existingFavoriteProducts?.includes(item.id)
 
-        // Combine existing and new product IDs
+        // // Combine existing and new product IDs
         const updatedProductIds = isFavorite
             ? existingFavoriteProducts.filter(
                   (productId) => productId !== item.id
               )
             : [...existingFavoriteProducts, item.id]
 
-        const requestBody = {
-            userId: userId,
-            productIds: updatedProductIds,
-        }
-
-        try {
-            const response = await fetch(
-                'http://13.239.122.212:8080/api/favourites',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestBody),
-                }
+        const isMacthed = apiProductIds.filter(order => 
+            order.products && order.products.some(product => 
+              updatedProductIds.includes(product.productId)
             )
-            const res = await response.json()
+          );
 
-            console.log("API RES",(res))
+        const matchedOrderIds = isMacthed.map(order => order.id);
+        console.log("matchedOrderIds",matchedOrderIds)
+            
+          if (isMacthed.length > 0) {
 
-            if (response.ok) {
-                // Update favoriteItems array based on the response
-                const updatedFavoriteItems = updatedProductIds.map(
-                    (productId) => ({
-                        item_id: productId,
-                        clicked_status: true,
-                    })
-                )
+            console.log("already there")
+            // try {
+            //     const response = await fetch(
+            //         `${deleteFavorites_URL}`,
+            //         {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //             },
+            //             body: {
+            //                 id:matchedOrderIds
+            //             },
+            //         }
+            //     )
+            //     const res = await response.json()
+            //     console.log(res)
+    
+            //     if (response.ok) {
+    
+            //         // const updatedFavoriteItems = updatedProductIds.map(
+            //         //     (productId) => ({
+            //         //         item_id: productId,
+            //         //         clicked_status: true,
+            //         //     })
+            //         // )
+    
+            //         // // Update state with the new favoriteItems array
+            //         // setFavoriteItems(updatedFavoriteItems)
+            //     } else {
+            //         // Handle error if the response is not okay
+            //         console.error('Failed to toggle favorite status')
+            //     }
+            // } catch (error) {
+            //     console.error('Error while making API request:', error)
+            // }
+            
+          } else {
 
-                // Update state with the new favoriteItems array
-                setFavoriteItems(updatedFavoriteItems)
-            } else {
-                // Handle error if the response is not okay
-                console.error('Failed to toggle favorite status')
-            }
-        } catch (error) {
-            console.error('Error while making API request:', error)
-        }
+            
+                const requestBody = {
+                    userId: userId,
+                    products: [
+                        {
+                        "productId": item.id,
+                        "quantity": 0
+                        }
+                    ],
+                }
+
+                try {
+                    const response = await fetch(
+                        'http://13.239.122.212:8080/api/favourites',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(requestBody),
+                        }
+                    )
+                    const res = await response.json()
+
+                    if (response.ok) {
+
+                        // const updatedFavoriteItems = updatedProductIds.map(
+                        //     (productId) => ({
+                        //         item_id: productId,
+                        //         clicked_status: true,
+                        //     })
+                        // )
+
+                        // // Update state with the new favoriteItems array
+                        // setFavoriteItems(updatedFavoriteItems)
+                    } else {
+                        // Handle error if the response is not okay
+                        console.error('Failed to toggle favorite status')
+                    }
+                } catch (error) {
+                    console.error('Error while making API request:', error)
+                }
+          }
+
+        // const requestBody = {
+        //     userId: userId,
+        //     productIds: updatedProductIds,
+        // }
+
     }
 
     // const handleFavoriteItem = async (item) => {
@@ -846,9 +904,9 @@ const Order = ({ navigation }) => {
               </ScrollView> */}
 
                                 <ScrollView>
-                                    {categories.map((categories) => (
+                                    {categories.map((categories,index) => (
                                         <TouchableOpacity
-                                            key={categories}
+                                            key={index}
                                             onPress={() =>
                                                 handleCategorySelection(
                                                     categories
@@ -960,9 +1018,9 @@ const Order = ({ navigation }) => {
                                             flexWrap: 'wrap',
                                         }}
                                     >
-                                        {selectedBrands.map((brand) => (
+                                        {selectedBrands.map((brand,key) => (
                                             <Text
-                                                key={brand}
+                                                key={key}
                                                 style={{
                                                     margin: 5,
                                                     padding: 5,
@@ -993,9 +1051,9 @@ const Order = ({ navigation }) => {
               </ScrollView> */}
 
                                 <ScrollView>
-                                    {brands.map((brand) => (
+                                    {brands.map((brand,key) => (
                                         <TouchableOpacity
-                                            key={brand.id}
+                                            key={key}
                                             onPress={() =>
                                                 handleBrandSelection(brand)
                                             }
@@ -1084,6 +1142,7 @@ const Order = ({ navigation }) => {
                     {allProducts.map((item, index) => (
                         <>
                             <View
+                            key={index}
                                 style={{
                                     marginTop: 5,
                                     backgroundColor: 'white',
@@ -1161,7 +1220,7 @@ const Order = ({ navigation }) => {
                                     >
                                         <MaterialCommunityIcons
                                             name={
-                                                favoriteItems.find(
+                                                favoriteItems?.find(
                                                     (favItem) =>
                                                         favItem.item_id ===
                                                         item.id
